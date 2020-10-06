@@ -35,7 +35,7 @@ for x in np.linspace(0.1, 2, 100):
 mag_field = MagneticField([1, 1, 1])
 
 for p in start:
-    print(p)
+
     try:
         sol = solve_ivp(lambda s, pos: solve_field_line(s, pos, mag_field), [steps[0], steps[-1]], p, t_eval=steps)
         plt.plot(sol.y[0], sol.y[1])
