@@ -100,6 +100,23 @@ fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 plt.plot(lines.y[0], lines.y[1], lines.y[2])
 
+
+#  (WIRE FIELD mu_0*I/2pi=1)
+steps = np.linspace(0, 14.2, 1000000)
+abc_field = MagneticField([
+    lambda pos: (1/(pos[0]**2+pos[1]**2))*(-pos[1]),
+    lambda pos: (1/(pos[0]**2+pos[1]**2))*(pos[0]),
+    lambda pos: 0],
+
+)
+ini = [[1, 2, 1], [1, 2, 2],[1, 2, 3]] # one field line
+lines = generate_lines(steps, ini, abc_field)
+
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+for line in lines:
+    plt.plot(line.y[0], line.y[1], line.y[2])
+
 plt.grid()
 plt.show()
 
