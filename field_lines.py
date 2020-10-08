@@ -69,58 +69,6 @@ def generate_lines(path, initial_pos: list, mag_field: MagneticField, method='RK
         return sols
 
 
-# UNIFORM FIELD EXAMPLE
-steps = np.linspace(0, 5, 1000)  # generate path length, smaller step length increases accuracy
-# input field component functions, will be static field in y direction
-uniform_field = MagneticField([
-    lambda pos: 0,   # B_x
-    lambda pos: 3,   # B_y
-    lambda pos: 0])  # B_z
-ini = [[1, 1, 0], [2, 1, 0], [3, 1, 0]]  # beginning of field lines
-lines = generate_lines(steps, ini, uniform_field)  # list of line solutions
-# line.y contains list of output positions
-# eg line.y[0] will be list of x coordinates, line.y[1] will be y, line.y[2] will be z
-
-# plot all lines
-plt.figure()
-for line in lines:
-    plt.plot(line.y[0], line.y[1])
-
-
-# ABC FIELD EXAMPLE
-steps = np.linspace(0, 3000, 1000000)
-abc_field = MagneticField([
-    lambda pos, a, b, c, lamb: a*np.sin(lamb*pos[2]) + c*np.cos(lamb*pos[1]),
-    lambda pos, a, b, c, lamb: b*np.sin(lamb*pos[0]) + a*np.cos(lamb*pos[2]),
-    lambda pos, a, b, c, lamb: c*np.sin(lamb*pos[1]) + b*np.cos(lamb*pos[0])],
-    1, np.sqrt(2/3), np.sqrt(1/3), 1
-)
-ini = [0.213, 0.342, 0.001]  # one field line
-lines = generate_lines(steps, ini, abc_field)
-
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
-plt.plot(lines.y[0], lines.y[1], lines.y[2])
-
-
-#  (WIRE FIELD mu_0*I/2pi=1)
-steps = np.linspace(0, 14.2, 1000000)
-abc_field = MagneticField([
-    lambda pos: (1/(pos[0]**2+pos[1]**2))*(-pos[1]),
-    lambda pos: (1/(pos[0]**2+pos[1]**2))*(pos[0]),
-    lambda pos: 0],
-
-)
-ini = [[1, 2, 1], [1, 2, 2],[1, 2, 3]] # one field line
-lines = generate_lines(steps, ini, abc_field, method='DOP853')
-
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
-for line in lines:
-    plt.plot(line.y[0], line.y[1], line.y[2])
-
-plt.grid()
-plt.show()
 
 
 
