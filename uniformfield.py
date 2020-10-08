@@ -18,3 +18,5 @@ lines = field_lines.generate_lines(steps, ini, uniform_field)  # list of line so
 plt.figure()
 for line in lines:
     plt.plot(line.y[0], line.y[1])
+
+plt.show()
