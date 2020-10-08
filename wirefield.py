@@ -61,6 +61,10 @@ for line_RK, line_DOP, begin in zip(lines_RK, lines_DOP, ini):
 
     ax.scatter(begin[0], begin[1], begin[2], color='black')
 
+
+arrow = field_lines.arrow_plot_3d(wire_field, xrange=[-5, 5], yrange=[-5, 5], zrange=[-5, 5], n=16)
+arrow.plot([0, 0], [0, 0], [-5, 5], color='black')
+
 """
 print("____ DOP853 _____")
 # ax = fig.add_subplot(111, projection='3d')

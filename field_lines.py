@@ -69,8 +69,50 @@ def generate_lines(path, initial_pos: list, mag_field: MagneticField, method='RK
         return sols
 
 
+def arrow_plot_2d(field: MagneticField, xrange=[0, 5], yrange=[0, 5], n=10 ):
+
+    fig, ax = plt.subplots()
+    x = np.linspace(xrange[0], xrange[1], n)
+    y = np.linspace(yrange[0], yrange[1], n)
+    X, Y = np.meshgrid(x, y)
+
+    u = []
+    v = []
+    for a, b in zip(x, y):
+        u.append(field.bx([a, b], *field.params))
+        v.append(field.by([a, b], *field.params))
+
+    U, V = np.meshgrid(u, v)
+
+    ax.quiver(X, Y, U, V)
+
+    return ax
 
 
+def arrow_plot_3d(field: MagneticField, xrange, yrange, zrange, n):
+
+    fig = plt.figure()
+    ax = fig.gca(projection='3d')
+
+    x = np.linspace(xrange[0], xrange[1], n)
+    y = np.linspace(yrange[0], yrange[1], n)
+    z = np.linspace(zrange[0], zrange[1], n)
+
+    X, Y, Z = np.meshgrid(x, y, z)
+
+    u = []
+    v = []
+    w = []
+    for a, b, c in zip(x, y, z):
+        u.append(field.bx([a, b, c], *field.params))
+        v.append(field.by([a, b, c], *field.params))
+        w.append(field.bz([a, b, c], *field.params))
+
+    U, V, W = np.meshgrid(u, v, w)
+
+    ax.quiver(X, Y, Z, U, V, W)
+
+    return ax
 
 
 """
