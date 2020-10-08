@@ -62,7 +62,27 @@ for line_RK, line_DOP, begin in zip(lines_RK, lines_DOP, ini):
     ax.scatter(begin[0], begin[1], begin[2], color='black')
 
 
-arrow = field_lines.arrow_plot_3d(wire_field, xrange=[-5, 5], yrange=[-5, 5], zrange=[-5, 5], n=16)
+u = []
+v = []
+w = []
+for pos in ini:
+    u.append(wire_field.bx([pos[0], pos[1], pos[2]], *wire_field.params))
+    v.append(wire_field.by([pos[0], pos[1], pos[2]], *wire_field.params))
+    w.append(wire_field.bz([pos[0], pos[1], pos[2]], *wire_field.params))
+ini = np.array(ini)
+
+u_norm = []
+v_norm = []
+for a, b in zip(u, v):
+    mag = np.sqrt(a**2 + b**2)
+    u_norm.append(a/mag)
+    v_norm.append(b/mag)
+
+
+ax.quiver(ini[:, 0], ini[:, 1], ini[:, 2], u_norm, v_norm, w, pivot='middle', color='black')
+print(w)
+
+arrow = field_lines.arrow_plot_3d(wire_field, xrange=[-5, 5], yrange=[-5, 5], zrange=[-5, 5], n=9)
 arrow.plot([0, 0], [0, 0], [-5, 5], color='black')
 
 """

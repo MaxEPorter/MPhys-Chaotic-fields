@@ -42,7 +42,7 @@ U, V = np.meshgrid(u, v)
 plt.quiver(X, Y, U, V)
 """
 
-ax = field_lines.arrow_plot(uniform_field)
+ax = field_lines.arrow_plot_2d(uniform_field)
 
 
 plt.show()
