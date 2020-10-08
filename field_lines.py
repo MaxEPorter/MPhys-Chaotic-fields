@@ -45,7 +45,7 @@ def get_line_begin(x: list, y: list, z: list):
 
 
 # generate field lines
-def generate_lines(path, initial_pos: list, mag_field: MagneticField):
+def generate_lines(path, initial_pos: list, mag_field: MagneticField, method='RK45'):
     # path arg as list of path length values
 
     # find whether multiple lines are expected
@@ -54,7 +54,8 @@ def generate_lines(path, initial_pos: list, mag_field: MagneticField):
         sol = solve_ivp(lambda s, pos: to_solve_field_lines(s, pos, mag_field),
                         [path[0], path[-1]],
                         initial_pos,
-                        t_eval=path)
+                        t_eval=path,
+                        method=method)
         return sol
 
     else:
@@ -63,7 +64,8 @@ def generate_lines(path, initial_pos: list, mag_field: MagneticField):
             sols.append(solve_ivp(lambda s, pos: to_solve_field_lines(s, pos, mag_field),
                                   [path[0], path[-1]],
                                   pos,
-                                  t_eval=path))
+                                  t_eval=path,
+                                  method=method))
         return sols
 
 
@@ -110,7 +112,7 @@ abc_field = MagneticField([
 
 )
 ini = [[1, 2, 1], [1, 2, 2],[1, 2, 3]] # one field line
-lines = generate_lines(steps, ini, abc_field)
+lines = generate_lines(steps, ini, abc_field, method='DOP853')
 
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
