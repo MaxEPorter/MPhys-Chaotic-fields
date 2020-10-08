@@ -108,12 +108,22 @@ def arrow_plot_3d(field: MagneticField, xrange, yrange, zrange, n):
         v.append(field.by([a, b, c], *field.params))
         w.append(field.bz([a, b, c], *field.params))
 
-    U, V, W = np.meshgrid(u, v, w)
+    U, V, W = normalyze(u, v, w)
+    U, V, W = np.meshgrid(U, V, W)
 
     ax.quiver(X, Y, Z, U, V, W)
 
     return ax
 
+
+def normalyze(x, y, z):
+    a, b, c = ([], [], [])
+    for q,w,e in zip(x, y, z):
+        mag = np.sqrt(q**2 + w**2 + e**2)
+        a.append(q/mag)
+        b.append(w/mag)
+        c.append(e/mag)
+    return a, b, c
 
 """
 

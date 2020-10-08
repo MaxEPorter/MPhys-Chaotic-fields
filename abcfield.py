@@ -17,4 +17,6 @@ fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 plt.plot(lines.y[0], lines.y[1], lines.y[2])
 
+arrow = field_lines.arrow_plot_3d(abc_field, [0,1],[0,1],[0,1],10)
+
 plt.show()
