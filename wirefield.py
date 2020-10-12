@@ -24,7 +24,7 @@ def cal_err(be, sol):
 # (WIRE FIELD mu_0*I/2pi=1)
 STEP_LENGTH = 0.001
 START = 0
-STOP = 20
+STOP = 40
 
 steps = np.arange(start=START, stop=STOP, step=STEP_LENGTH)
 
@@ -45,23 +45,25 @@ for line_RK, line_DOP, begin in zip(lines_RK, lines_DOP, ini):
 
     print('start = ({}, {})'.format(begin[0], begin[1]))
 
-    plt.plot(line_RK.y[0], line_RK.y[1], line_RK.y[2], color='blue')
+    plt.plot([0, 0], [0, 0], [-1, 4], color='black')
+    #plt.plot(line_RK.y[0], line_RK.y[1], line_RK.y[2], color='blue')
     plt.plot(line_DOP.y[0], line_DOP.y[1], line_DOP.y[2], color='red')
 
     err_RK, f_RK = cal_err(begin, line_RK)
     err_DOP, f_DOP = cal_err(begin, line_DOP)
 
-    ax.scatter(f_RK[0], f_RK[1], f_RK[2], color='blue')
-    ax.scatter(f_DOP[0], f_DOP[1], f_DOP[2], color='red')
+    #ax.scatter(f_RK[0], f_RK[1], f_RK[2], color='blue')
+    #ax.scatter(f_DOP[0], f_DOP[1], f_DOP[2], color='red')
     print('RK end   = ({}, {})'.format(f_RK[0], f_RK[1]))
     print('x = {:.3f}%   y = {:.3f}%'.format(err_RK[0], err_RK[1]))
 
     print('DOP end   = ({}, {})'.format(f_DOP[0], f_DOP[1]))
     print('x = {:.3f}%   y = {:.3f}%'.format(err_DOP[0], err_DOP[1]))
 
-    ax.scatter(begin[0], begin[1], begin[2], color='black')
+    #ax.scatter(begin[0], begin[1], begin[2], color='black')
 
 
+"""
 u = []
 v = []
 w = []
@@ -79,11 +81,15 @@ for a, b in zip(u, v):
     v_norm.append(b/mag)
 
 
-ax.quiver(ini[:, 0], ini[:, 1], ini[:, 2], u_norm, v_norm, w, pivot='middle', color='black')
+#ax.quiver(ini[:, 0], ini[:, 1], ini[:, 2], u_norm, v_norm, w, pivot='middle', color='black')
 print(w)
 
 arrow = field_lines.arrow_plot_3d(wire_field, xrange=[-5, 5], yrange=[-5, 5], zrange=[-5, 5], n=9)
 arrow.plot([0, 0], [0, 0], [-5, 5], color='black')
+
+
+"""
+
 
 """
 print("____ DOP853 _____")
