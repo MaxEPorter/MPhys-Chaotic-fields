@@ -56,7 +56,7 @@ def generate_lines(path, initial_pos: list, mag_field: MagneticField, method='RK
                         initial_pos,
                         t_eval=path,
                         method=method,
-                        max_step=0.0000000001)
+                        max_step=0.1)
         return sol
 
     else:
@@ -67,7 +67,7 @@ def generate_lines(path, initial_pos: list, mag_field: MagneticField, method='RK
                                   pos,
                                   t_eval=path,
                                   method=method,
-                                  max_step=0.000000001))
+                                  max_step=0.1))
         return sols
 
 
