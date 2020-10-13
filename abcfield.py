@@ -17,7 +17,7 @@ line_RK = field_lines.generate_lines(steps, ini, abc_field, method='RK45')
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 plt.plot(line_DOP.y[0], line_DOP.y[1], line_DOP.y[2], color='red')
-#plt.plot(line_RK.y[0], line_RK.y[1], line_RK.y[2], color='blue')
+plt.plot(line_RK.y[0], line_RK.y[1], line_RK.y[2], color='blue')
 
 # arrow = field_lines.arrow_plot_3d(abc_field, [0,1],[0,1],[0,1],10)
 
