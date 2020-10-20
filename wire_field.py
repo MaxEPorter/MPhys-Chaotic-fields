@@ -23,23 +23,6 @@ def circumference(x: list):
     return 2 * math.pi * np.sqrt(x[0] ** 2 + x[1] ** 2)
 
 
-def calc_error(start_pos, solution):
-    circ = circumference(start_pos)
-    index = -1
-    end = [solution[1][index], solution[2][index], solution[3][index]]
-    p_diff = percentage_difference(start_pos, end)
-
-    return p_diff
-
-
-def generate_starts(y=[1, 3], z=[0, 3]):
-    begin = []
-    for i in np.arange(0, 3, 1):
-        for j in np.arange(1, 3, 0.5):
-            begin.append([0, j, i])
-    return begin
-
-
 def get_step_lengths(solution):
     t = solution.s
     lengths = []
@@ -58,7 +41,7 @@ def get_step_lengths(solution):
 def vary_steps(rot=ROTATIONS):
     start = [10, 0, 0]
     # steps = np.linspace(0.001, 2, 400)
-    steps = np.logspace(-3, 0, 500)
+    steps = np.logspace(-2, 0, 500)
     path_length = rot * circumference(start)
     space = []
 
@@ -74,8 +57,21 @@ def vary_steps(rot=ROTATIONS):
 
     fig = plt.figure()
     ax = fig.add_subplot(111)
+
+    steps = np.log(steps)
+    space = np.log(space)
+
     ax.plot(steps, space)
-    ax.set_xscale('log')
+
+    try:
+        p = np.polyfit(steps, space, deg=1)
+        fit = np.polyval(steps, p)
+        ax.plot(steps, fit, color='black')
+        print(p)
+    except:
+        pass
+
+    # ax.set_xscale('log')
     ax.set_xlabel('step size')
     ax.set_ylabel('distance')
     ax.grid()
@@ -165,7 +161,7 @@ if __name__ == '__main__':
     vary_steps(10)
     # one_loop(1000)
     # plot_step_lengths(1)
-    # compare_methods(100)
+    #compare_methods(1)
 
     plt.show()
 
