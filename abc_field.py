@@ -2,7 +2,7 @@ import solvefields
 import matplotlib.pyplot as plt
 import numpy as np
 import imageio
-import matplotlib.animation
+
 
 
 def compare_methods():
@@ -186,10 +186,37 @@ def plot_one(ss, se, size, ini, param):
     z.set_ylabel('z')
 
 
+def multi_plot():
+    ini = [[i, j, k] for i in np.linspace(-1, 1, 2) for j in np.linspace(-1, 1, 2) for k in np.linspace(-1, 1, 2)]
+    lines = []
+    for i in ini:
+        lines.append(solvefields.abc_field(0, 1000, 0.01, i, [1, np.sqrt(1/3), np.sqrt(2/3), 1]))
+
+    fig = plt.figure()
+    x = fig.add_subplot(222)
+    y = fig.add_subplot(223)
+    z = fig.add_subplot(224)
+
+    for line in lines:
+        x.plot(line.s, line.x)
+        z.plot(line.s, line.z)
+        y.plot(line.s, line.y)
+
+    x.set_xlabel('s')
+    x.set_ylabel('x')
+
+    y.set_xlabel('s')
+    y.set_ylabel('y')
+
+    z.set_xlabel('s')
+    z.set_ylabel('z')
+
+
 if __name__ == '__main__':
     # compare_methods()
     #compare_step()
     # ini_gifs()
-    lambda_gifs()
+    #lambda_gifs()
+    multi_plot()
 
     plt.show()

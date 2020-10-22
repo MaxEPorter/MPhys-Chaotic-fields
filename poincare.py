@@ -1,58 +1,57 @@
 import solvefields
 import saveload
 import abc_field
+import double_abc_field
 
 import matplotlib.pyplot as plt
 import numpy as np
 
 plt.style.use('seaborn-whitegrid')
 
-"""
-sol = solvefields.abc_field(0, 1000, 0.1, [1.5, 1.5, 0], [1, np.sqrt(2/3), np.sqrt(1/3), 1])
-# saveload.save(sol, 'poincare1')
 
-#sol = saveload.load('poincare1')
+def one_line():
+    start = 0
+    end = 1000
+    step = 0.1
+    ini = [0.27, 0.03, 0.79]
+    #param = [1, 1, np.sqrt(2/3), np.sqrt(2/3), np.sqrt(1/3), np.sqrt(1/3), 1, -0.5]
+    param = [1, np.sqrt(2/3), np.sqrt(1/3), 1]
 
-x = []
-y = []
+    abc_field.plot_one(start, end, step, ini, param)
 
-for i in range(len(sol.s)):
-
-    zplane = 0
-
-    try:
-
-        if sol.z[i] < zplane and sol.z[i+1] > zplane:
-            x.append(sol.x[i])
-            y.append(sol.y[i])
-
-    except IndexError:
-        break
+    fog = plt.figure()
+    ox = fog.add_subplot()
+    f = solvefields.double_abc_poincare(start, end, step, ini, param)
+    ox.scatter(f[0], f[1], marker='.', color='purple')#, s=0.2)
 
 
-traj = plt.figure()
-trajax = traj.add_subplot(111, projection='3d')
-trajax.plot(sol.x, sol.y, sol.z, color='purple')
-trajax.set_xlabel('x')
-trajax.set_ylabel('y')
-trajax.set_zlabel('z')
+def multi_line():
+    start = 0
+    end = 1000
+    step = 0.1
+    ini = [[i, j, k] for i in np.linspace(-10, 10, 15) for j in np.linspace(-10, 10, 15) for k in np.linspace(-10, 10, 15)]
+    print(len(ini))
 
-fig = plt.figure()
-ax = fig.add_subplot()
+    param = [1, np.sqrt(1/3), np.sqrt(2/3), 1]
 
-ax.plot(x, y, 'r.')
-"""
-start = 0
-end = 1000000
-step = 0.1
-ini = [0.2, 0.5, 0.1]
-param = [1, np.sqrt(1/3), np.sqrt(2/3), 1]
+    points = []
+    for i in ini:
+        points.append(solvefields.abc_poincare(start, end, step, i, param))
 
-#abc_field.plot_one(start, end, step, ini, param)
+    fig = plt.figure()
+    ax = fig.add_subplot()
 
-fog = plt.figure()
-ox = fog.add_subplot()
-f = solvefields.poincare(start, end, step, ini, param)
-ox.scatter(f[0], f[1], marker='.', color='purple', s=0.2)
+    for p in points:
+        ax.scatter(p[0], p[1], marker='.', color='purple')
 
-plt.show()
+
+
+
+if __name__ == '__main__':
+    one_line()
+    #multi_line()
+    plt.show()
+
+
+
+
