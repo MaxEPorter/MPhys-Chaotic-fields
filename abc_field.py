@@ -33,7 +33,7 @@ def compare_methods():
 
 def compare_step():
     start = [1, 2, 4]
-    params = [1, 2, 3, 0.5]
+    params = [1, 2, 3, 0.27]
     path_start = 0
     path_length = 600
     step_length = [0.001, 0.01, 0.1, 1]
@@ -125,10 +125,10 @@ def ini_gifs():
 
 
 def lambda_gifs():
-    lam = np.linspace(0.25, 0.5, 50)
+    lam = np.linspace(0.25, 0.28, 100)
 
     path_start = 0
-    path_length = 600
+    path_length = 300
     step_length = 0.1
 
     ini = [1, 2, 4]
@@ -137,14 +137,15 @@ def lambda_gifs():
     for i in lam:
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='3d')
+        ax.set_title(round(i, 4), fontsize=18, fontweight='light')
 
-        ax.set_xlim3d([-200, 400])
+        ax.set_xlim3d([-70, 70])
         ax.set_xlabel('X')
 
-        ax.set_ylim3d([-200, 200])
+        ax.set_ylim3d([-20, 20])
         ax.set_ylabel('Y')
 
-        ax.set_zlim3d([-200, 200])
+        ax.set_zlim3d([0, 400])
         ax.set_zlabel('Z')
 
         line = solvefields.abc_field(path_start, path_length, step_length, ini, [1, 2, 3, i])
