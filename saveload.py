@@ -16,7 +16,7 @@ def save(sol, fname):
     }
 
     with open('saves/{}.json'.format(fname), 'w') as outfile:
-        json.dump(tosave, outfile, indent=4)
+        json.dump(tosave, outfile)
 
 
 def load(fname):
