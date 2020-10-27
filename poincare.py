@@ -5,32 +5,32 @@ import double_abc_field
 
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas
 
 plt.style.use('seaborn-whitegrid')
 
 
 def one_line():
     start = 0
-    end = 100000
+    end = 10000000
     step = 0.1
-    ini = [0.27, 0.03, 0.79]
-    #param = [1, 1, np.sqrt(2/3), np.sqrt(2/3), np.sqrt(1/3), np.sqrt(1/3), 1, -0.5]
+    ini = [0.2, 3.2, 1.7]
+    # param = [1, 1, np.sqrt(2/3), np.sqrt(2/3), np.sqrt(1/3), np.sqrt(1/3), 1, -0.5]  # double ABC params
     param = [1, np.sqrt(2/3), np.sqrt(1/3), 1]
+    fname = "C:/Users/Max/Documents/Uni/MPhys/chaotic magnetic field/MPhys-Chaotic-fields/saves/poincare.txt"
 
     abc_field.plot_one(start, end, step, ini, param)
 
     fog = plt.figure()
-    ox = fog.add_subplot()
-    f = solvefields.abc_poincare(start, end, step, ini, param)
-    print(f)
-    a = [[], []]
-    for x, y in zip(f[0], f[1]):
-        x, y = (x/(2*np.pi), y/(2*np.pi))
-        x, y = (x-int(x), y-int(y))
-        a[0].append(x)
-        a[1].append(y)
+    ax = fog.add_subplot()
+    #solvefields.abc_poincare(start, end, step, ini, param, fname)
+    f = pandas.read_csv(fname)
 
-    ox.scatter(f[0], f[1], marker='.', color='purple')#, s=0.2)
+    ax.scatter(f['x'], f['y'], marker='.', color='purple')#, s=0.2)
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+    ax.set_xlabel(r'$\frac{x}{2 \pi}$')
+    ax.set_ylabel(r'$\frac{y}{2 \pi}$')
 
 
 def multi_line():
@@ -43,8 +43,15 @@ def multi_line():
     param = [1, np.sqrt(1/3), np.sqrt(2/3), 1]
 
     points = []
+    f = []
     for i in ini:
         points.append(solvefields.abc_poincare(start, end, step, i, param))
+        a = [[], []]
+        for x, y in zip(points[0], points[1]):
+            x, y = (x/(2*np.pi), y/(2*np.pi))
+            x, y = (x-int(x), y-int(y))
+            a[0].append(x)
+            a[1].append(y)
 
     fig = plt.figure()
     ax = fig.add_subplot()
@@ -71,7 +78,7 @@ def mu(lines, index, mid):
 
 def var():
     start = 0
-    end = 10000
+    end = 1000
     step = 0.1
     vol = 4  # must be odd
     ini = [[i, j, k] for i in np.linspace(-0.05, 0.05, vol) for j in np.linspace(-0.05, 0.05, vol) for k in
@@ -104,11 +111,8 @@ def var():
 
 
 if __name__ == '__main__':
-    #one_line()
+    one_line()
     #multi_line()
-    var()
+    #var()
     plt.show()
-
-
-
 
