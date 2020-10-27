@@ -19,11 +19,11 @@ def one_line():
     param = [1, np.sqrt(2/3), np.sqrt(1/3), 1]
     fname = "C:/Users/Max/Documents/Uni/MPhys/chaotic magnetic field/MPhys-Chaotic-fields/saves/poincare.txt"
 
-    abc_field.plot_one(start, end, step, ini, param)
+    #abc_field.plot_one(start, end, step, ini, param)
 
     fog = plt.figure()
     ax = fog.add_subplot()
-    #solvefields.abc_poincare(start, end, step, ini, param, fname)
+    solvefields.abc_poincare(start, end, step, ini, param, fname)
     f = pandas.read_csv(fname)
 
     ax.scatter(f['x'], f['y'], marker='.', color='purple')#, s=0.2)
