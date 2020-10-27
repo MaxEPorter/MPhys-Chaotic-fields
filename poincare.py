@@ -12,7 +12,7 @@ plt.style.use('seaborn-whitegrid')
 
 def one_line():
     start = 0
-    end = 10000000
+    end = 1000
     step = 0.1
     ini = [0.2, 3.2, 1.7]
     # param = [1, 1, np.sqrt(2/3), np.sqrt(2/3), np.sqrt(1/3), np.sqrt(1/3), 1, -0.5]  # double ABC params
@@ -23,7 +23,7 @@ def one_line():
 
     fog = plt.figure()
     ax = fog.add_subplot()
-    solvefields.abc_poincare(start, end, step, ini, param, fname)
+    solvefields.abc_poincare(start, end, step, ini, param, fname, "z", 0)
     f = pandas.read_csv(fname)
 
     ax.scatter(f['x'], f['y'], marker='.', color='purple')#, s=0.2)
