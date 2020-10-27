@@ -17,7 +17,7 @@ def one_line():
     ini = [0.2, 3.2, 1.7]
     # param = [1, 1, np.sqrt(2/3), np.sqrt(2/3), np.sqrt(1/3), np.sqrt(1/3), 1, -0.5]  # double ABC params
     param = [1, np.sqrt(2/3), np.sqrt(1/3), 1]
-    fname = "C:/Users/Max/Documents/Uni/MPhys/chaotic magnetic field/MPhys-Chaotic-fields/saves/poincare.txt"
+    fname = "saves/poincare.txt"
 
     #abc_field.plot_one(start, end, step, ini, param)
 
