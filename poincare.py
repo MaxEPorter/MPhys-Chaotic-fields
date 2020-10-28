@@ -78,7 +78,7 @@ def mu(lines, index, mid):
 
 def var():
     start = 0
-    end = 1000
+    end = 10000
     step = 0.1
     vol = 4  # must be odd
     ini = [[i, j, k] for i in np.linspace(-0.05, 0.05, vol) for j in np.linspace(-0.05, 0.05, vol) for k in
@@ -106,13 +106,27 @@ def var():
     fig = plt.figure()
     ax = fig.add_subplot()
     ax.plot(s, var, color='purple')
-    ax.set_xlabel('log10(s)')
-    ax.set_ylabel('log10(variance)')
+    ax.set_xlabel(r'$\log_{10} s$')
+    ax.set_ylabel(r'$\log_{10} \sigma^2$')
+
+    a = [i for i in s if i > 2.08]
+    print(a)
+    index = len(s) - len(a)
+    b = var[index:]
+
+    try:
+        p = np.polyfit(a, b, deg=1)
+        fit = np.polyval(p, a)
+        ax.plot(a, fit, color='black', label='{}'.format(p[0]))
+        print(p)
+        ax.legend()
+    except:
+        print('fit didnt work')
 
 
 if __name__ == '__main__':
-    one_line()
+    #one_line()
     #multi_line()
-    #var()
+    var()
     plt.show()
 

@@ -2,8 +2,9 @@ import solvefields
 import matplotlib.pyplot as plt
 import numpy as np
 import imageio
+import time
 
-
+plt.style.use('seaborn-whitegrid')
 
 def compare_methods():
     start = [1.3, 2.1, 4.3]
@@ -212,11 +213,52 @@ def multi_plot():
     z.set_ylabel('z')
 
 
+def times():
+    start = 0
+    ends = np.linspace(0, 10000, 1000)
+    step = 0.1
+    ini = [0.2, 3.2, 1.7]
+    param = [1, 1, 1, 1]
+
+    n_steps = ends/step
+
+    t = []
+    for i in ends:
+        t0 = time.time()
+
+        solvefields.abc_field(start, i, step, ini, param)
+
+        t1 = time.time()
+        t.append(t1 - t0)
+
+    fig = plt.figure()
+    ax = fig.add_subplot()
+    ax.plot(n_steps, t, color='indigo')
+    ax.set_xlabel('number of steps')
+    ax.set_ylabel('duration (s)')
+    fig.text(.7, .25, 'A = {}\nB = {}\nC = {}\n$\lambda$ = {}'.format(*param),
+             fontsize=12,
+             bbox={'facecolor': 'grey', 'alpha': 0.3, 'pad': 5})
+
+    try:
+        p = np.polyfit(n_steps, t, deg=1)
+        fit = np.polyval(p, n_steps)
+        m = p[0]*1e6
+        c = p[1]*1e6
+        ax.plot(n_steps, fit, color='black', linestyle='--', label='gradient = {:f} $ \mu s/step$\nintercept = {:f} $\mu s$'.format(m, c))
+        print(p)
+        ax.legend()
+    except:
+        print('fit didnt work')
+
+
+
 if __name__ == '__main__':
     # compare_methods()
     #compare_step()
     # ini_gifs()
     #lambda_gifs()
-    multi_plot()
+    #multi_plot()
+    times()
 
     plt.show()
