@@ -1,6 +1,7 @@
 import json
 import solvefields
 
+
 def save(sol, fname):
 
     tosave = {
@@ -38,13 +39,34 @@ def load(fname):
     return sol
 
 
+def save_history(start, end, step, ini, param, note):
+    with open('saves/history.json', 'r') as file:
+        data = json.load(file)
+        id = data['abc'][-1]['id'] + 1
+        data['abc'].append({
+            'id': id,
+            'note': note,
+            'start': start,
+            'end': end,
+            'step': step,
+            'ini': ini,
+            'param': param
+        })
+
+    with open('saves/history.json', 'w') as file:
+        json.dump(data, file, indent=4)
+
+
+def read_history(field, id):
+    with open('saves/history.json', 'r') as file:
+        data = json.load(file)
+        for i in data[field]:
+            if i['id'] == id:
+                return i
+
+
+
 if __name__ == '__main__':
     # test it works
-    sol = solvefields.abc_field(0, 100, 0.01, [1, 2, 3], [4, 5, 6, 7])
-    print(sol.field)
-
-    save(sol, 'test')
-    l = load('test')
-
-    print(l.field)
-    print(l.s)
+    #save_history(0, 10, 0.1, [1,1,1], [1,1,1,1], 'field trapped in 2 dimensions')
+    print(read_history('abc', 0)['note'])

@@ -3,8 +3,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import imageio
 import time
+import saveload
 
-plt.style.use('seaborn-whitegrid')
+#plt.style.use('seaborn-whitegrid')
+#plt.style.use('Solarize_Light2')
+#plt.style.use('bmh')
+plt.style.use('ggplot')
 
 def compare_methods():
     start = [1.3, 2.1, 4.3]
@@ -265,9 +269,13 @@ def dobre_zero_c(n=1):
     step = 0.1
     a = np.linspace(0, 2 * np.pi, n)
     ini = [[i, j, k] for i in a for j in a for k in a]
-    param = [np.sqrt(1/2), np.sqrt(1/2), 0, 1]
+    param = [1, 1, 0, 1]
 
-    print(estimate_duration(n**3*end/step))
+    print(ini)
+
+    print('expected time = {}s'.format(estimate_duration(n**3*end/step)))
+
+    plot_one(start, 600, step, [1, 2, 1], param)
 
     fig = plt.figure()
     ax = fig.add_subplot()
@@ -362,11 +370,16 @@ def one_projection(e=3000, st=0.1, i=[1., 1., 1.], p=[1., 2., 1., 1.]):
     y = solvefields.periodic_projection(line.y)
     z = solvefields.periodic_projection(line.z)
 
-    ax1.scatter(x, y, s=0.1)
-    ax2.scatter(x, z, s=0.1)
-    ax3.scatter(y, z, s=0.1)
+    ax1.scatter(x, y, s=0.1, color='mediumpurple')
+    ax2.scatter(x, z, s=0.1, color='mediumseagreen')
+    ax3.scatter(y, z, s=0.1, color='steelblue')
 
-    #v = [param[1] * np.sin(i) + param[0] * np.cos(j) for i, j in zip(line.x, line.z)]
+    begin = solvefields.periodic_projection(ini)
+    ax1.scatter(begin[0], begin[1], marker='x', color='black', s=20)
+    ax2.scatter(begin[0], begin[2], marker='x', color='black', s=20)
+    ax3.scatter(begin[1], begin[2], marker='x', color='black', s=20)
+
+    # v = [param[1] * np.sin(i) + param[0] * np.cos(j) for i, j in zip(line.x, line.z)]
 
     #ax1.set_title('x = 0-2$\pi$')
     ax1.set_xlabel(r'x/2$\pi$')
@@ -386,8 +399,24 @@ def one_projection(e=3000, st=0.1, i=[1., 1., 1.], p=[1., 2., 1., 1.]):
     ax3.set_xlim(0, 1)
     ax3.set_ylim(0, 1)
 
+    fig.text(.7, .25, 'A = {:.3f}\nB = {:.3f}\nC = {:.3f}\n$\lambda$ = {:.3f}'.format(*param),
+             fontsize=22,
+             bbox={'facecolor': 'grey', 'alpha': 0.3, 'pad': 5})
+
     t1 = time.time()
     print('time taken = {}'.format(t1-t0))
+
+
+def test_projection():
+    length = 1000
+    ini = [0.4*2*np.pi, 0.4*2*np.pi, 0.4*2*np.pi]
+    param = [1, 8, 1, 1]
+
+    plot_one(0, length, 0.1, ini, param)
+    one_projection(length, 0.1, ini, param)
+
+    saveload.save_history(0, length, 0.1, ini, param, 'field linear in 2 dimensions, with complicated periodic motion in y')
+
 
 def estimate_duration(n_steps):
     m = 6.608e-6
@@ -405,14 +434,9 @@ if __name__ == '__main__':
     #projection()
     #plot_one(0, 10000, 0.1, [0.479*2*np.pi, 0.748*2*np.pi, 0.485*2*np.pi], [1, 2, 1, 1])
 
-    #plot_one(0, 10000, 0.1, [0.5*2*np.pi, 0.5*2*np.pi, 0.5*2*np.pi], [1, 2, 1, 1])
-    #one_projection(10000, 0.1, [0.5*2*np.pi, 0.5*2*np.pi, 0.5*2*np.pi], [1, 2, 1, 1])
+    test_projection()
 
-
-    dobre_zero_c(9)
-    dobre_zero_c(10)
-    dobre_zero_c(8)
-
+    #dobre_zero_c(9)
 
 
     plt.show()
