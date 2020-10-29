@@ -252,6 +252,169 @@ def times():
         print('fit didnt work')
 
 
+def dobre_zero_c():
+    # TESTING KNOWN SOLUTION OF ABC WITH C=0
+    # SOLUTION DOBRE ABC FLOW PAGE 360
+    start = 0
+    end = 20
+    step = 0.1
+    ini = [1, 1, 2]
+    param = [np.sqrt(1/2), np.sqrt(1/2), 0, 1]
+    print(estimate_duration(end/step))
+
+    fig = plt.figure()
+    ax1 = fig.add_subplot(221)
+
+    n = 50
+    a = np.linspace(0, 2*np.pi, n)
+    c = np.linspace(0, 1, n)
+
+    for s, col in zip([[i, 1, 1] for i in a], c):
+        line = solvefields.abc_field(start, end, step, s, param)
+        xz = solvefields.periodic_projection(line.x, line.z)
+        ax1.scatter(xz[0], xz[1], color=(col, 0.2, 0.2), s=0.1)
+
+    ax2 = fig.add_subplot(222)
+    for s, col in zip([[1, i, 1] for i in a], c):
+        line = solvefields.abc_field(start, end, step, s, param)
+        xz = solvefields.periodic_projection(line.x, line.z)
+        ax2.scatter(xz[0], xz[1], color=(col, 0.2, 0.2), s=0.1)
+
+    ax3 = fig.add_subplot(223)
+    for s, col in zip([[1, 1, i] for i in a], c):
+        line = solvefields.abc_field(start, end, step, s, param)
+        xz = solvefields.periodic_projection(line.x, line.z)
+        ax3.scatter(xz[0], xz[1], color=(col, 0.2, 0.2), s=0.1)
+
+
+    #plot_one(start, end, step, ini, param)
+
+    v = [param[1]*np.sin(i) + param[0]*np.cos(j) for i, j in zip(line.x, line.z)]
+
+    ax1.set_title('x = 0-2$\pi$')
+    ax1.set_xlabel(r'x/2$\pi$')
+    ax1.set_ylabel(r'z/2$\pi$')
+    ax1.set_xlim(0, 1)
+    ax1.set_ylim(0, 1)
+
+    ax2.set_title('y = 0-2$\pi$')
+    ax2.set_xlabel(r'x/2$\pi$')
+    ax2.set_ylabel(r'z/2$\pi$')
+    ax2.set_xlim(0, 1)
+    ax2.set_ylim(0, 1)
+
+    ax3.set_title('z = 0-2$\pi$')
+    ax3.set_xlabel(r'x/2$\pi$')
+    ax3.set_ylabel(r'z/2$\pi$')
+    ax3.set_xlim(0, 1)
+    ax3.set_ylim(0, 1)
+
+
+def multi_projection():
+    start = 0
+    end = 30000
+    step = 0.1
+    n = 1
+    a = np.linspace(0, 2 * np.pi, n)
+    ini = [[i, j, k] for i in a for j in a for k in a]
+    param = [1, 2, 1, 1]
+    print('estimated time = {}'.format(estimate_duration(n**3*end / step)))
+
+    t0 = time.time()
+
+    fig = plt.figure()
+    ax1 = fig.add_subplot(221)
+    ax2 = fig.add_subplot(222)
+    ax3 = fig.add_subplot(223)
+
+    c = np.linspace(0, 1, n)
+
+    for begin in ini:
+        line = solvefields.abc_field(start, end, step, begin, param)
+        x = solvefields.periodic_projection(line.x)
+        y = solvefields.periodic_projection(line.y)
+        z = solvefields.periodic_projection(line.z)
+
+        ax1.scatter(x, y, s=0.1)
+        ax2.scatter(x, z, s=0.1)
+        ax3.scatter(y, z, s=0.1)
+
+    v = [param[1] * np.sin(i) + param[0] * np.cos(j) for i, j in zip(line.x, line.z)]
+
+    #ax1.set_title('x = 0-2$\pi$')
+    ax1.set_xlabel(r'x/2$\pi$')
+    ax1.set_ylabel(r'y/2$\pi$')
+    ax1.set_xlim(0, 1)
+    ax1.set_ylim(0, 1)
+
+    #ax2.set_title('y = 0-2$\pi$')
+    ax2.set_xlabel(r'x/2$\pi$')
+    ax2.set_ylabel(r'z/2$\pi$')
+    ax2.set_xlim(0, 1)
+    ax2.set_ylim(0, 1)
+
+    #ax3.set_title('z = 0-2$\pi$')
+    ax3.set_xlabel(r'y/2$\pi$')
+    ax3.set_ylabel(r'z/2$\pi$')
+    ax3.set_xlim(0, 1)
+    ax3.set_ylim(0, 1)
+
+    t1 = time.time()
+    print('time taken = {}'.format(t1-t0))
+
+
+def one_projection(e=3000, st=0.1, i=[1, 1, 1], p=[1, 2, 1, 1]):
+    start = 0
+    end = e
+    step = st
+    ini = i
+    param = p
+    print('estimated time = {}'.format(estimate_duration(end / step)))
+
+    t0 = time.time()
+
+    fig = plt.figure()
+    ax1 = fig.add_subplot(221)
+    ax2 = fig.add_subplot(222)
+    ax3 = fig.add_subplot(223)
+
+    line = solvefields.abc_field(start, end, step, ini, param)
+    x = solvefields.periodic_projection(line.x)
+    y = solvefields.periodic_projection(line.y)
+    z = solvefields.periodic_projection(line.z)
+
+    ax1.scatter(x, y, s=0.1)
+    ax2.scatter(x, z, s=0.1)
+    ax3.scatter(y, z, s=0.1)
+
+    #v = [param[1] * np.sin(i) + param[0] * np.cos(j) for i, j in zip(line.x, line.z)]
+
+    #ax1.set_title('x = 0-2$\pi$')
+    ax1.set_xlabel(r'x/2$\pi$')
+    ax1.set_ylabel(r'y/2$\pi$')
+    ax1.set_xlim(0, 1)
+    ax1.set_ylim(0, 1)
+
+    #ax2.set_title('y = 0-2$\pi$')
+    ax2.set_xlabel(r'x/2$\pi$')
+    ax2.set_ylabel(r'z/2$\pi$')
+    ax2.set_xlim(0, 1)
+    ax2.set_ylim(0, 1)
+
+    #ax3.set_title('z = 0-2$\pi$')
+    ax3.set_xlabel(r'y/2$\pi$')
+    ax3.set_ylabel(r'z/2$\pi$')
+    ax3.set_xlim(0, 1)
+    ax3.set_ylim(0, 1)
+
+    t1 = time.time()
+    print('time taken = {}'.format(t1-t0))
+
+def estimate_duration(n_steps):
+    m = 6.608e-6
+    return m*n_steps
+
+
 
 if __name__ == '__main__':
     # compare_methods()
@@ -259,6 +422,14 @@ if __name__ == '__main__':
     # ini_gifs()
     #lambda_gifs()
     #multi_plot()
-    times()
+    #times()
+    #dobre_zero_c()
+    #projection()
+    #plot_one(0, 10000, 0.1, [0.479*2*np.pi, 0.748*2*np.pi, 0.485*2*np.pi], [1, 2, 1, 1])
+    plot_one(0, 100000, 0.1, [0.5*2*np.pi, 0.5*2*np.pi, 0.5*2*np.pi], [1, 2, 1, 1])
+    one_projection(100000, 0.1, [0.5*2*np.pi, 0.5*2*np.pi, 0.5*2*np.pi], [1, 2, 1, 1])
+
+
+
 
     plt.show()
