@@ -160,6 +160,8 @@ def lambda_gifs():
 
 
 def plot_one(ss, se, size, ini, param):
+    print('expected time = {}'.format(estimate_duration(se/size)))
+    t0 = time.time()
     line = solvefields.abc_field(ss, se, size, ini, param)
 
     fig = plt.figure()
@@ -185,6 +187,9 @@ def plot_one(ss, se, size, ini, param):
     z.plot(line.s, line.z, color='green')
     z.set_xlabel('s')
     z.set_ylabel('z')
+
+    t1 = time.time()
+    print('time taken = {}'.format(t1-t0))
 
 
 def multi_plot():
@@ -252,72 +257,46 @@ def times():
         print('fit didnt work')
 
 
-def dobre_zero_c():
+def dobre_zero_c(n=1):
     # TESTING KNOWN SOLUTION OF ABC WITH C=0
     # SOLUTION DOBRE ABC FLOW PAGE 360
     start = 0
     end = 20
     step = 0.1
-    ini = [1, 1, 2]
-    param = [np.sqrt(1/2), np.sqrt(1/2), 0, 1]
-    print(estimate_duration(end/step))
-
-    fig = plt.figure()
-    ax1 = fig.add_subplot(221)
-
-    n = 50
-    a = np.linspace(0, 2*np.pi, n)
-    c = np.linspace(0, 1, n)
-
-    for s, col in zip([[i, 1, 1] for i in a], c):
-        line = solvefields.abc_field(start, end, step, s, param)
-        xz = solvefields.periodic_projection(line.x, line.z)
-        ax1.scatter(xz[0], xz[1], color=(col, 0.2, 0.2), s=0.1)
-
-    ax2 = fig.add_subplot(222)
-    for s, col in zip([[1, i, 1] for i in a], c):
-        line = solvefields.abc_field(start, end, step, s, param)
-        xz = solvefields.periodic_projection(line.x, line.z)
-        ax2.scatter(xz[0], xz[1], color=(col, 0.2, 0.2), s=0.1)
-
-    ax3 = fig.add_subplot(223)
-    for s, col in zip([[1, 1, i] for i in a], c):
-        line = solvefields.abc_field(start, end, step, s, param)
-        xz = solvefields.periodic_projection(line.x, line.z)
-        ax3.scatter(xz[0], xz[1], color=(col, 0.2, 0.2), s=0.1)
-
-
-    #plot_one(start, end, step, ini, param)
-
-    v = [param[1]*np.sin(i) + param[0]*np.cos(j) for i, j in zip(line.x, line.z)]
-
-    ax1.set_title('x = 0-2$\pi$')
-    ax1.set_xlabel(r'x/2$\pi$')
-    ax1.set_ylabel(r'z/2$\pi$')
-    ax1.set_xlim(0, 1)
-    ax1.set_ylim(0, 1)
-
-    ax2.set_title('y = 0-2$\pi$')
-    ax2.set_xlabel(r'x/2$\pi$')
-    ax2.set_ylabel(r'z/2$\pi$')
-    ax2.set_xlim(0, 1)
-    ax2.set_ylim(0, 1)
-
-    ax3.set_title('z = 0-2$\pi$')
-    ax3.set_xlabel(r'x/2$\pi$')
-    ax3.set_ylabel(r'z/2$\pi$')
-    ax3.set_xlim(0, 1)
-    ax3.set_ylim(0, 1)
-
-
-def multi_projection():
-    start = 0
-    end = 30000
-    step = 0.1
-    n = 1
     a = np.linspace(0, 2 * np.pi, n)
     ini = [[i, j, k] for i in a for j in a for k in a]
-    param = [1, 2, 1, 1]
+    param = [np.sqrt(1/2), np.sqrt(1/2), 0, 1]
+
+    print(estimate_duration(n**3*end/step))
+
+    fig = plt.figure()
+    ax = fig.add_subplot()
+
+    for i in ini:
+        line = solvefields.abc_field(start, end, step, i, param)
+        x = solvefields.periodic_projection(line.x)
+        z = solvefields.periodic_projection(line.z)
+
+        ax.scatter(x, z, s=0.1)
+
+    ax.set_xlabel(r'x/2$\pi$')
+    ax.set_ylabel(r'y/2$\pi$')
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+
+    #multi_projection(start, end, step, n=n, p=param)
+
+
+def multi_projection(s=0, e=30000, st=0.1, n=1, p=[1, 2, 1, 1]):
+
+    a = np.linspace(0, 2 * np.pi, n)
+    ini = [[i, j, k] for i in a for j in a for k in a]
+    print('positions = {}'.format(ini))
+    start = s
+    end = e
+    step = st
+
+    param = p
     print('estimated time = {}'.format(estimate_duration(n**3*end / step)))
 
     t0 = time.time()
@@ -363,7 +342,7 @@ def multi_projection():
     print('time taken = {}'.format(t1-t0))
 
 
-def one_projection(e=3000, st=0.1, i=[1, 1, 1], p=[1, 2, 1, 1]):
+def one_projection(e=3000, st=0.1, i=[1., 1., 1.], p=[1., 2., 1., 1.]):
     start = 0
     end = e
     step = st
@@ -415,7 +394,6 @@ def estimate_duration(n_steps):
     return m*n_steps
 
 
-
 if __name__ == '__main__':
     # compare_methods()
     #compare_step()
@@ -426,8 +404,13 @@ if __name__ == '__main__':
     #dobre_zero_c()
     #projection()
     #plot_one(0, 10000, 0.1, [0.479*2*np.pi, 0.748*2*np.pi, 0.485*2*np.pi], [1, 2, 1, 1])
-    plot_one(0, 100000, 0.1, [0.5*2*np.pi, 0.5*2*np.pi, 0.5*2*np.pi], [1, 2, 1, 1])
-    one_projection(100000, 0.1, [0.5*2*np.pi, 0.5*2*np.pi, 0.5*2*np.pi], [1, 2, 1, 1])
+
+    #plot_one(0, 10000, 0.1, [0.5*2*np.pi, 0.5*2*np.pi, 0.5*2*np.pi], [1, 2, 1, 1])
+    #one_projection(10000, 0.1, [0.5*2*np.pi, 0.5*2*np.pi, 0.5*2*np.pi], [1, 2, 1, 1])
+
+
+    dobre_zero_c(9)
+    dobre_zero_c(10)
 
 
 
