@@ -411,7 +411,7 @@ if __name__ == '__main__':
 
     dobre_zero_c(9)
     dobre_zero_c(10)
-
+    dobre_zero_c(8)
 
 
 
