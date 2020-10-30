@@ -419,12 +419,12 @@ def test_projection():
 
 
 def projection_gif():
-    n = 100
+    n = 30
     start = 0
-    end = 5000
+    end = 1000
     step = 0.1
-    ini = [[i, 0.5*2*np.pi, 0.5*2*np.pi] for i in np.linspace(0, 2*np.pi, n)]
-    param = [1, 2, 1, 1]
+    ini = [[i, j, 0.5*2*np.pi] for i in np.linspace(0, 2*np.pi, n) for j in np.linspace(0, 2*np.pi, n)]
+    param = [1, 2, 10, 1]
 
     print('expected time = {}'.format(estimate_duration(n * end/step)))
     t0 = time.time()
@@ -471,8 +471,8 @@ def projection_gif():
         ax3.set_xlim(0, 1)
         ax3.set_ylim(0, 1)
 
-        fig.text(.7, .25, 'A = {:.3f}\nB = {:.3f}\nC = {:.3f}\n$\lambda$ = {:.3f}'.format(*param),
-                 fontsize=22,
+        fig.text(.6, .2, 'A = {:.3f}\nB = {:.3f}\nC = {:.3f}\n$\lambda$ = {:.3f}'.format(*param),
+                 fontsize=14,
                  bbox={'facecolor': 'grey', 'alpha': 0.3, 'pad': 5})
 
         fig.savefig('temp.png')
