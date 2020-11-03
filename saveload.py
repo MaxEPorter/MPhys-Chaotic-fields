@@ -1,5 +1,6 @@
 import json
 import solvefields
+import numpy as np
 
 
 def save(sol, fname):
@@ -68,5 +69,5 @@ def read_history(field, id):
 
 if __name__ == '__main__':
     # test it works
-    #save_history(0, 10, 0.1, [1,1,1], [1,1,1,1], 'field trapped in 2 dimensions')
+    #save_history(0, 1000, 0.1, [0.3*2*np.pi, 0.2*2*np.pi, 0.2*2*np.pi], [1, 2, 3, 4], 'frequent regular vortices in xy plane')
     print(read_history('abc', 0)['note'])

@@ -1,5 +1,6 @@
 import solvefields
 import matplotlib.pyplot as plt
+from matplotlib.ticker import (AutoMinorLocator, MultipleLocator)
 import numpy as np
 import imageio
 import time
@@ -7,9 +8,11 @@ import saveload
 
 #plt.style.use('seaborn-whitegrid')
 #plt.style.use('Solarize_Light2')
-plt.style.use('bmh')
+#plt.style.use('bmh')
 #plt.style.use('ggplot')
 #plt.style.use('dark_background')
+plt.style.use('default')
+
 
 def compare_methods():
     start = [1.3, 2.1, 4.3]
@@ -229,31 +232,37 @@ def plot_one_periodic(ss, se, size, ini, param):
     x.scatter(line.s, lx, color='green', s=lw)
     x.set_xlabel('s')
     x.set_ylabel('x')
+    x.grid()
 
     y = fog.add_subplot(232)
     y.scatter(line.s, ly, color='green', s=lw)
     y.set_xlabel('s')
     y.set_ylabel('y')
+    y.grid()
 
     z = fog.add_subplot(233)
     z.scatter(line.s, lz, color='green', s=lw)
     z.set_xlabel('s')
     z.set_ylabel('z')
+    z.grid(which='both')
 
     xy = fog.add_subplot(234)
     xy.scatter(lx, ly, color='blue', s=lw)
     xy.set_xlabel('$x/2\pi$')
     xy.set_ylabel('$y/2\pi$')
+    xy.grid()
 
     xz = fog.add_subplot(235)
     xz.scatter(lx, lz, color='blue', s=lw)
     xz.set_xlabel('$x/2\pi$')
     xz.set_ylabel('$z/2\pi$')
+    xz.grid()
 
     yz = fog.add_subplot(236)
     yz.scatter(ly, lz, color='blue', s=lw)
     yz.set_xlabel('$y/2\pi$')
     yz.set_ylabel('$z/2\pi$')
+    yz.grid()
 
     t1 = time.time()
     print('time taken = {}'.format(t1-t0))
@@ -413,8 +422,8 @@ def multi_projection(s=0, e=30000, st=0.1, n=1, p=[1, 2, 1, 1]):
     print('time taken = {}'.format(t1-t0))
 
 
-def one_projection(e=3000, st=0.1, i=[1., 1., 1.], p=[1., 2., 1., 1.]):
-    start = 0
+def one_projection(s=0, e=3000, st=0.1, i=[1., 1., 1.], p=[1., 2., 1., 1.]):
+    start = s
     end = e
     step = st
     ini = i
@@ -423,48 +432,48 @@ def one_projection(e=3000, st=0.1, i=[1., 1., 1.], p=[1., 2., 1., 1.]):
 
     t0 = time.time()
 
-    fig = plt.figure()
-    ax1 = fig.add_subplot(221)
-    ax2 = fig.add_subplot(222)
-    ax3 = fig.add_subplot(223)
-
     line = solvefields.abc_field(start, end, step, ini, param)
     x = solvefields.periodic_projection(line.x)
     y = solvefields.periodic_projection(line.y)
     z = solvefields.periodic_projection(line.z)
-
-    ax1.scatter(x, y, s=0.1, color='mediumpurple')
-    ax2.scatter(x, z, s=0.1, color='mediumseagreen')
-    ax3.scatter(y, z, s=0.1, color='steelblue')
-
     begin = solvefields.periodic_projection(ini)
+
+    plt.figure()
+    ax1 = plt.subplot()
+    ax1.scatter(x, y, s=0.1, color='mediumpurple')
     ax1.scatter(begin[0], begin[1], marker='x', color='black', s=20)
-    ax2.scatter(begin[0], begin[2], marker='x', color='black', s=20)
-    ax3.scatter(begin[1], begin[2], marker='x', color='black', s=20)
-
-    # v = [param[1] * np.sin(i) + param[0] * np.cos(j) for i, j in zip(line.x, line.z)]
-
     #ax1.set_title('x = 0-2$\pi$')
     ax1.set_xlabel(r'x/2$\pi$')
     ax1.set_ylabel(r'y/2$\pi$')
     ax1.set_xlim(0, 1)
     ax1.set_ylim(0, 1)
 
+    plt.figure()
+    ax2 = plt.subplot()
+    ax2.scatter(x, z, s=0.1, color='mediumseagreen')
+    ax2.scatter(begin[0], begin[2], marker='x', color='black', s=20)
     #ax2.set_title('y = 0-2$\pi$')
     ax2.set_xlabel(r'x/2$\pi$')
     ax2.set_ylabel(r'z/2$\pi$')
     ax2.set_xlim(0, 1)
     ax2.set_ylim(0, 1)
 
+    plt.figure()
+    ax3 = plt.subplot()
+    ax3.scatter(y, z, s=0.1, color='steelblue')
+    ax3.scatter(begin[1], begin[2], marker='x', color='black', s=20)
     #ax3.set_title('z = 0-2$\pi$')
     ax3.set_xlabel(r'y/2$\pi$')
     ax3.set_ylabel(r'z/2$\pi$')
     ax3.set_xlim(0, 1)
     ax3.set_ylim(0, 1)
 
-    fig.text(.7, .25, 'A = {:.3f}\nB = {:.3f}\nC = {:.3f}\n$\lambda$ = {:.3f}'.format(*param),
-             fontsize=22,
-             bbox={'facecolor': 'grey', 'alpha': 0.3, 'pad': 5})
+
+    # v = [param[1] * np.sin(i) + param[0] * np.cos(j) for i, j in zip(line.x, line.z)]
+
+    #fig.text(.7, .25, 'A = {:.3f}\nB = {:.3f}\nC = {:.3f}\n$\lambda$ = {:.3f}'.format(*param),
+    #         fontsize=22,
+    #         bbox={'facecolor': 'grey', 'alpha': 0.3, 'pad': 5})
 
     t1 = time.time()
     print('time taken = {}'.format(t1-t0))
@@ -549,7 +558,7 @@ def projection_gif_ini():
     print('time taken = {}'.format(t1-t0))
 
 
-def projection_one_plane_ini():
+def projection_one_plane_ini_gif():
     n = 90
     start = 0
     end = 500
@@ -682,7 +691,8 @@ if __name__ == '__main__':
     # dobre_zero_c()
     # projection()
     #plot_one(0, 10000, 0.1, [0.3*2*np.pi, 0.2*2*np.pi, 0.2*2*np.pi], [1, 2, 1, 1])
-    plot_one_periodic(0, 1000, 0.1, [0.3*2*np.pi, 0.2*2*np.pi, 0.2*2*np.pi], [1, 2, 3, 4])
+    #plot_one_periodic(0, 10000, 0.1, [0.3*2*np.pi, 0.2*2*np.pi, 0.2*2*np.pi], [1, 2, 3, 4])
+    one_projection(0, 10000, 0.1, [0.3*2*np.pi, 0.2*2*np.pi, 0.2*2*np.pi], [1, 2, 3, 4])
 
     # multi_projection(s=0, e=3000, st=0.1, n=5, p=[1, 2, 1, 1])
     #test_projection()
