@@ -447,6 +447,7 @@ def one_projection(s=0, e=3000, st=0.1, i=[1., 1., 1.], p=[1., 2., 1., 1.]):
     ax1.set_ylabel(r'y/2$\pi$')
     ax1.set_xlim(0, 1)
     ax1.set_ylim(0, 1)
+    ax1.grid()
 
     plt.figure()
     ax2 = plt.subplot()
@@ -457,6 +458,7 @@ def one_projection(s=0, e=3000, st=0.1, i=[1., 1., 1.], p=[1., 2., 1., 1.]):
     ax2.set_ylabel(r'z/2$\pi$')
     ax2.set_xlim(0, 1)
     ax2.set_ylim(0, 1)
+    ax2.grid()
 
     plt.figure()
     ax3 = plt.subplot()
@@ -467,6 +469,7 @@ def one_projection(s=0, e=3000, st=0.1, i=[1., 1., 1.], p=[1., 2., 1., 1.]):
     ax3.set_ylabel(r'z/2$\pi$')
     ax3.set_xlim(0, 1)
     ax3.set_ylim(0, 1)
+    ax3.grid()
 
 
     # v = [param[1] * np.sin(i) + param[0] * np.cos(j) for i, j in zip(line.x, line.z)]
