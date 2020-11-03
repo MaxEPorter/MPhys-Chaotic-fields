@@ -7,9 +7,9 @@ import saveload
 
 #plt.style.use('seaborn-whitegrid')
 #plt.style.use('Solarize_Light2')
-#plt.style.use('bmh')
+plt.style.use('bmh')
 #plt.style.use('ggplot')
-plt.style.use('dark_background')
+#plt.style.use('dark_background')
 
 def compare_methods():
     start = [1.3, 2.1, 4.3]
@@ -190,6 +190,44 @@ def plot_one(ss, se, size, ini, param):
 
     z = fig.add_subplot(224)
     z.plot(line.s, line.z, color='green')
+    z.set_xlabel('s')
+    z.set_ylabel('z')
+
+    t1 = time.time()
+    print('time taken = {}'.format(t1-t0))
+
+
+def plot_one_periodic(ss, se, size, ini, param):
+    print('expected time = {}'.format(estimate_duration(se/size)))
+    t0 = time.time()
+    line = solvefields.abc_field(ss, se, size, ini, param)
+    lx = solvefields.periodic_projection(line.x)
+    ly = solvefields.periodic_projection(line.y)
+    lz = solvefields.periodic_projection(line.z)
+
+    fig = plt.figure()
+    traj = fig.add_subplot(projection='3d')
+
+    traj.plot(ini[0], ini[1], ini[2], color='black', marker='x')
+    traj.plot(lx, ly, lz, color='purple', linewidth=0.1)
+    traj.set_xlabel('x')
+    traj.set_ylabel('y')
+    traj.set_zlabel('z')
+
+    fog = plt.figure()
+
+    x = fog.add_subplot(221)
+    x.plot(line.s, lx, color='green')
+    x.set_xlabel('s')
+    x.set_ylabel('x')
+
+    y = fog.add_subplot(222)
+    y.plot(line.s, ly, color='green')
+    y.set_xlabel('s')
+    y.set_ylabel('y')
+
+    z = fog.add_subplot(223)
+    z.plot(line.s, lz, color='green')
     z.set_xlabel('s')
     z.set_ylabel('z')
 
@@ -620,11 +658,12 @@ if __name__ == '__main__':
     # dobre_zero_c()
     # projection()
     #plot_one(0, 10000, 0.1, [0.3*2*np.pi, 0.2*2*np.pi, 0.2*2*np.pi], [1, 2, 1, 1])
+    plot_one_periodic(0, 10000, 0.1, [0.3*2*np.pi, 0.2*2*np.pi, 0.2*2*np.pi], [1, 2, 3, 4])
 
     # multi_projection(s=0, e=3000, st=0.1, n=5, p=[1, 2, 1, 1])
     #test_projection()
     #projection_gif()
-    projection_one_plane_ini()
+    #projection_one_plane_ini()
     #projection_gif_param()
     # dobre_zero_c(9)
 
