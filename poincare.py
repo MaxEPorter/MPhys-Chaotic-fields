@@ -76,13 +76,14 @@ def mu(lines, index, mid):
     return mub
 
 
-def var():
+def var_abc():
 
     """
+
     start = 0
-    end = 10000
+    end = 100
     step = 0.1
-    vol = 4  # must be odd
+    vol = 5  # must be odd
     ini = [[i, j, k] for i in np.linspace(-0.05, 0.05, vol) for j in np.linspace(-0.05, 0.05, vol) for k in
            np.linspace(-0.05, 0.05, vol)]
     print(ini)
@@ -101,6 +102,29 @@ def var():
         for j in range(len(lines)):
             v += np.power(delta(lines[mid], lines[j], i) - mub, 2)
         var.append(v/len(lines))
+
+    s = np.log10((np.array(lines[0].s)))
+    var = np.log10((np.array(var)))
+
+    fig = plt.figure()
+    ax = fig.add_subplot()
+    ax.plot(s, var, color='purple')
+    ax.set_xlabel(r'$\log_{10} s$')
+    ax.set_ylabel(r'$\log_{10} \sigma^2$')
+
+    a = [i for i in s if i > 0]
+    index = len(s) - len(a)
+    b = var[index:]
+
+    try:
+        p = np.polyfit(a, b, deg=1)
+        fit = np.polyval(p, a)
+        ax.plot(a, fit, color='black', label='{}'.format(p[0]))
+        print(p)
+        ax.legend()
+    except:
+        print('fit didnt work')
+
     """
 
     f = solvefields.variance()
@@ -129,9 +153,36 @@ def var():
         print('fit didnt work')
 
 
+def var_double():
+    f = solvefields.double_abc_variance()
+
+    s = np.log10(np.array(f[0]))
+    var = np.log10(np.array(f[1]))
+
+    fig = plt.figure()
+    ax = fig.add_subplot()
+    ax.plot(s, var, color='purple')
+    ax.set_xlabel(r'$\log_{10} s$')
+    ax.set_ylabel(r'$\log_{10} \sigma^2$')
+
+    a = [i for i in s if i > 1.86]
+    print(a)
+    index = len(s) - len(a)
+    b = var[index:]
+
+    try:
+        p = np.polyfit(a, b, deg=1)
+        fit = np.polyval(p, a)
+        ax.plot(a, fit, color='black', label='{}'.format(p[0]))
+        print(p)
+        ax.legend()
+    except:
+        print('fit didnt work')
+
+
 if __name__ == '__main__':
     #one_line()
     #multi_line()
-    var()
+    var_double()
     plt.show()
 

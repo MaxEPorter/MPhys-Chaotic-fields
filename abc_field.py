@@ -201,7 +201,7 @@ def plot_one(ss, se, size, ini, param):
 
 
 def plot_one_periodic(ss, se, size, ini, param):
-    lw = 0.1
+    lw = 0.2
 
     print('expected time = {}'.format(estimate_duration(se/size)))
     t0 = time.time()
@@ -209,6 +209,7 @@ def plot_one_periodic(ss, se, size, ini, param):
     lx = solvefields.periodic_projection(line.x)
     ly = solvefields.periodic_projection(line.y)
     lz = solvefields.periodic_projection(line.z)
+    begin = solvefields.periodic_projection(ini)
 
     fig = plt.figure()
 
@@ -220,11 +221,14 @@ def plot_one_periodic(ss, se, size, ini, param):
     traj.set_zlabel('z')
 
     traj_per = fig.add_subplot(122, projection='3d')
-    traj_per.plot(ini[0], ini[1], ini[2], color='black', marker='x')
-    traj_per.plot(lx, ly, lz, color='blue', linewidth=lw)
+    traj_per.plot(begin[0], begin[1], begin[2], color='black', marker='x')
+    traj_per.scatter(lx, ly, lz, color='blue', s=lw)
     traj_per.set_xlabel('$x/2\pi$')
     traj_per.set_ylabel('$y/2\pi$')
     traj_per.set_zlabel('$z/2\pi$')
+    traj_per.set_xlim(0, 1)
+    traj_per.set_ylim(0, 1)
+    traj_per.set_zlim(0, 1)
 
     fog = plt.figure()
 
@@ -494,12 +498,12 @@ def test_projection():
 
 
 def projection_gif_ini():
-    n = 30
+    n = 400
     start = 0
-    end = 100
+    end = 5000
     step = 0.1
     ini = [[i, 0.5*2*np.pi, 0.5*2*np.pi] for i in np.linspace(0, 2*np.pi, n)]
-    param = [1, 1, 1, 1]
+    param = [1, 1, 1, 4]
 
     print('expected time = {}'.format(estimate_duration(n * end/step)))
     t0 = time.time()
@@ -546,8 +550,8 @@ def projection_gif_ini():
         ax3.set_xlim(0, 1)
         ax3.set_ylim(0, 1)
 
-        fig.text(.6, .2, 'A = {:.3f}\nB = {:.3f}\nC = {:.3f}\n$\lambda$ = {:.3f}'.format(*param),
-                 fontsize=14,
+        fig.text(.55, .17, 'A = {:.3f}\nB = {:.3f}\nC = {:.3f}\n$\lambda$ = {:.3f}\nx = [{:.3f}, {:.3f}, {:.3f}]'.format(*param, *i),
+                 fontsize=12,
                  bbox={'facecolor': 'grey', 'alpha': 0.3, 'pad': 5})
 
         fig.savefig('temp.png')
@@ -555,18 +559,18 @@ def projection_gif_ini():
 
         ims.append(imageio.imread('temp.png'))
 
-    imageio.mimsave('test.gif', ims, fps=10)
+    imageio.mimsave('test.gif', ims, fps=12)
 
     t1 = time.time()
     print('time taken = {}'.format(t1-t0))
 
 
 def projection_one_plane_ini_gif():
-    n = 90
+    n = 100
     start = 0
-    end = 500
+    end = 1000
     step = 0.1
-    ini = [[i, 0.5 * 2 * np.pi, 0.5 * 2 * np.pi] for i in np.linspace(0, 2 * np.pi, n)]
+    ini = [[i, 0.68 * 2 * np.pi, 0.5 * 2 * np.pi] for i in np.linspace(0, 2 * np.pi, n)]
     param = [1, 5, 1, 1]
     color = [(0.8, 0.6, i, 1) for i in np.linspace(0.5, 0.8, n)]
 
@@ -612,9 +616,9 @@ def projection_one_plane_ini_gif():
 
 
 def projection_gif_param():
-    n = 30
+    n = 100
     start = 0
-    end = 1000
+    end = 10000
     step = 0.1
     ini = [0.2*2*np.pi, 0.2*2*np.pi, 0.5*2*np.pi]
     param = [[1, 1, 1, i] for i in np.linspace(0, 10, n)]
@@ -694,15 +698,17 @@ if __name__ == '__main__':
     # dobre_zero_c()
     # projection()
     #plot_one(0, 10000, 0.1, [0.3*2*np.pi, 0.2*2*np.pi, 0.2*2*np.pi], [1, 2, 1, 1])
-    #plot_one_periodic(0, 10000, 0.1, [0.3*2*np.pi, 0.2*2*np.pi, 0.2*2*np.pi], [1, 2, 3, 4])
-    one_projection(0, 10000, 0.1, [0.3*2*np.pi, 0.2*2*np.pi, 0.2*2*np.pi], [1, 2, 3, 4])
+
+    plot_one_periodic(0, 5000, 0.1, [0.4*2*np.pi, 0.5*2*np.pi, 0.5*2*np.pi], [1, 2, 1, 1])
+    #one_projection(0, 10000, 0.1, [0.3*2*np.pi, 0.3*2*np.pi, 0.2*2*np.pi], [1, 1, 1, 4])
 
     # multi_projection(s=0, e=3000, st=0.1, n=5, p=[1, 2, 1, 1])
     #test_projection()
-    #projection_gif()
+
+    #projection_gif_ini()
+
     #projection_one_plane_ini()
     #projection_gif_param()
     # dobre_zero_c(9)
-
 
     plt.show()

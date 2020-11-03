@@ -44,7 +44,7 @@ def times():
 
 
 def estimate_duration(n_steps):
-    m = 6.608e-6
+    m = 8.463138e-6
     return m*n_steps
 
 
@@ -77,7 +77,7 @@ def plot_one(ss, se, size, ini, param):
 
 
 def plot_one_periodic(ss, se, size, ini, param):
-    lw = 0.1
+    lw = 0.02
 
     print('expected time = {}'.format(estimate_duration(se/size)))
     t0 = time.time()
@@ -85,6 +85,7 @@ def plot_one_periodic(ss, se, size, ini, param):
     lx = solvefields.periodic_projection(line.x)
     ly = solvefields.periodic_projection(line.y)
     lz = solvefields.periodic_projection(line.z)
+    begin = solvefields.periodic_projection(ini)
 
     fig = plt.figure()
 
@@ -96,8 +97,8 @@ def plot_one_periodic(ss, se, size, ini, param):
     traj.set_zlabel('z')
 
     traj_per = fig.add_subplot(122, projection='3d')
-    traj_per.plot(ini[0], ini[1], ini[2], color='black', marker='x')
-    traj_per.plot(lx, ly, lz, color='blue', linewidth=lw)
+    traj_per.scatter(begin[0], begin[1], begin[2], color='black', marker='x')
+    traj_per.scatter(lx, ly, lz, color='blue', s=lw)
     traj_per.set_xlabel('$x/2\pi$')
     traj_per.set_ylabel('$y/2\pi$')
     traj_per.set_zlabel('$z/2\pi$')
@@ -139,5 +140,7 @@ def plot_one_periodic(ss, se, size, ini, param):
 
 
 if __name__ == '__main__':
-    times()
+    #times()
+    plot_one_periodic(0, 10000, 0.1, [0.4*2*np.pi, 0.5*2*np.pi, 0.5*2*np.pi], [1, 1, 0.57735026919, 0.57735026919, 0.81649658092, 0.81649658092, 1, -0.5])
+
     plt.show()
