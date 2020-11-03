@@ -77,6 +77,8 @@ def mu(lines, index, mid):
 
 
 def var():
+
+    """
     start = 0
     end = 10000
     step = 0.1
@@ -99,9 +101,12 @@ def var():
         for j in range(len(lines)):
             v += np.power(delta(lines[mid], lines[j], i) - mub, 2)
         var.append(v/len(lines))
+    """
 
-    s = np.log10(np.array(lines[0].s))
-    var = np.log10(np.array(var))
+    f = solvefields.variance()
+
+    s = np.log10(np.array(f[0]))
+    var = np.log10(np.array(f[1]))
 
     fig = plt.figure()
     ax = fig.add_subplot()

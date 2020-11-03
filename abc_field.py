@@ -8,7 +8,8 @@ import saveload
 #plt.style.use('seaborn-whitegrid')
 #plt.style.use('Solarize_Light2')
 #plt.style.use('bmh')
-plt.style.use('ggplot')
+#plt.style.use('ggplot')
+plt.style.use('dark_background')
 
 def compare_methods():
     start = [1.3, 2.1, 4.3]
@@ -418,13 +419,13 @@ def test_projection():
     #saveload.save_history(0, length, 0.1, ini, param, 'field linear in 2 dimensions, with complicated periodic motion in y')
 
 
-def projection_gif():
+def projection_gif_ini():
     n = 30
     start = 0
-    end = 1000
+    end = 100
     step = 0.1
-    ini = [[i, j, 0.5*2*np.pi] for i in np.linspace(0, 2*np.pi, n) for j in np.linspace(0, 2*np.pi, n)]
-    param = [1, 2, 10, 1]
+    ini = [[i, 0.5*2*np.pi, 0.5*2*np.pi] for i in np.linspace(0, 2*np.pi, n)]
+    param = [1, 1, 1, 1]
 
     print('expected time = {}'.format(estimate_duration(n * end/step)))
     t0 = time.time()
@@ -486,6 +487,124 @@ def projection_gif():
     print('time taken = {}'.format(t1-t0))
 
 
+def projection_one_plane_ini():
+    n = 90
+    start = 0
+    end = 500
+    step = 0.1
+    ini = [[i, 0.5 * 2 * np.pi, 0.5 * 2 * np.pi] for i in np.linspace(0, 2 * np.pi, n)]
+    param = [1, 5, 1, 1]
+    color = [(0.8, 0.6, i, 1) for i in np.linspace(0.5, 0.8, n)]
+
+    print('expected time = {}'.format(estimate_duration(n * end / step)))
+    t0 = time.time()
+
+    ims = []
+    for i, c in zip(ini, color):
+        fig = plt.figure()
+        ax1 = fig.add_subplot()
+
+        line = solvefields.abc_field(start, end, step, i, param)
+        x = solvefields.periodic_projection(line.x)
+        y = solvefields.periodic_projection(line.y)
+        z = solvefields.periodic_projection(line.z)
+
+        ax1.scatter(y, z, s=0.5, color=c)#'springgreen')
+
+        begin = solvefields.periodic_projection(i)
+        ax1.scatter(begin[0], begin[1], marker='x', color='black', s=20)
+
+        # v = [param[1] * np.sin(i) + param[0] * np.cos(j) for i, j in zip(line.x, line.z)]
+
+        # ax1.set_title('x = 0-2$\pi$')
+        ax1.set_xlabel(r'x/2$\pi$')
+        ax1.set_ylabel(r'y/2$\pi$')
+        ax1.set_xlim(0, 1)
+        ax1.set_ylim(0, 1)
+
+        fig.text(.6, .2, 'A = {:.3f}\nB = {:.3f}\nC = {:.3f}\n$\lambda$ = {:.3f}'.format(*param),
+                 fontsize=14,
+                 bbox={'facecolor': 'grey', 'alpha': 0.3, 'pad': 5})
+
+        fig.savefig('temp.png')
+        plt.close()
+
+        ims.append(imageio.imread('temp.png'))
+
+    imageio.mimsave('test.gif', ims, fps=10)
+
+    t1 = time.time()
+    print('time taken = {}'.format(t1 - t0))
+
+
+def projection_gif_param():
+    n = 30
+    start = 0
+    end = 1000
+    step = 0.1
+    ini = [0.2*2*np.pi, 0.2*2*np.pi, 0.5*2*np.pi]
+    param = [[1, 1, 1, i] for i in np.linspace(0, 10, n)]
+
+    print('expected time = {}'.format(estimate_duration(n * end/step)))
+    t0 = time.time()
+
+    ims = []
+    for i in param:
+
+        fig = plt.figure()
+        ax1 = fig.add_subplot(221)
+        ax2 = fig.add_subplot(222)
+        ax3 = fig.add_subplot(223)
+
+        line = solvefields.abc_field(start, end, step, ini, i)
+        x = solvefields.periodic_projection(line.x)
+        y = solvefields.periodic_projection(line.y)
+        z = solvefields.periodic_projection(line.z)
+
+        ax1.scatter(x, y, s=0.1, color='magenta')
+        ax2.scatter(x, z, s=0.1, color='mediumseagreen')
+        ax3.scatter(y, z, s=0.1, color='dodgerblue')
+
+        begin = solvefields.periodic_projection(ini)
+        ax1.scatter(begin[0], begin[1], marker='x', color='black', s=20)
+        ax2.scatter(begin[0], begin[2], marker='x', color='black', s=20)
+        ax3.scatter(begin[1], begin[2], marker='x', color='black', s=20)
+
+        # v = [param[1] * np.sin(i) + param[0] * np.cos(j) for i, j in zip(line.x, line.z)]
+
+        # ax1.set_title('x = 0-2$\pi$')
+        ax1.set_xlabel(r'x/2$\pi$')
+        ax1.set_ylabel(r'y/2$\pi$')
+        ax1.set_xlim(0, 1)
+        ax1.set_ylim(0, 1)
+
+        # ax2.set_title('y = 0-2$\pi$')
+        ax2.set_xlabel(r'x/2$\pi$')
+        ax2.set_ylabel(r'z/2$\pi$')
+        ax2.set_xlim(0, 1)
+        ax2.set_ylim(0, 1)
+
+        # ax3.set_title('z = 0-2$\pi$')
+        ax3.set_xlabel(r'y/2$\pi$')
+        ax3.set_ylabel(r'z/2$\pi$')
+        ax3.set_xlim(0, 1)
+        ax3.set_ylim(0, 1)
+
+        fig.text(.6, .2, 'A = {:.3f}\nB = {:.3f}\nC = {:.3f}\n$\lambda$ = {:.3f}'.format(*i),
+                 fontsize=14,
+                 bbox={'facecolor': 'grey', 'alpha': 0.3, 'pad': 5})
+
+        fig.savefig('temp.png')
+        plt.close()
+
+        ims.append(imageio.imread('temp.png'))
+
+    imageio.mimsave('test.gif', ims, fps=10)
+
+    t1 = time.time()
+    print('time taken = {}'.format(t1-t0))
+
+
 def estimate_duration(n_steps):
     m = 6.608e-6
     return m*n_steps
@@ -504,7 +623,9 @@ if __name__ == '__main__':
 
     # multi_projection(s=0, e=3000, st=0.1, n=5, p=[1, 2, 1, 1])
     #test_projection()
-    projection_gif()
+    #projection_gif()
+    projection_one_plane_ini()
+    #projection_gif_param()
     # dobre_zero_c(9)
 
 
