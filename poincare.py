@@ -10,23 +10,15 @@ import pandas
 plt.style.use('seaborn-whitegrid')
 
 
-def one_line():
-    start = 0
-    end = 1000
-    step = 0.1
-    ini = [0.2, 3.2, 1.7]
-    # param = [1, 1, np.sqrt(2/3), np.sqrt(2/3), np.sqrt(1/3), np.sqrt(1/3), 1, -0.5]  # double ABC params
-    param = [1, np.sqrt(2/3), np.sqrt(1/3), 1]
-    fname = "saves/poincare.txt"
+def poincare_one_line(start=0, end=100, step=0.1, ini=[0.2, 3.2, 1.7], param=[1, np.sqrt(2/3), np.sqrt(1/3), 1]):
 
     #abc_field.plot_one(start, end, step, ini, param)
 
     fog = plt.figure()
     ax = fog.add_subplot()
-    solvefields.abc_poincare(start, end, step, ini, param, fname, "z", 0)
-    f = pandas.read_csv(fname)
+    xy = solvefields.abc_poincare(start, end, step, ini, param, "z", 0.2)
 
-    ax.scatter(f['x'], f['y'], marker='.', color='purple')#, s=0.2)
+    ax.scatter(xy[0], xy[1], color='purple', s=0.05)
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
     ax.set_xlabel(r'$\frac{x}{2 \pi}$')
@@ -78,56 +70,7 @@ def mu(lines, index, mid):
 
 def var_abc():
 
-    """
-
-    start = 0
-    end = 100
-    step = 0.1
-    vol = 5  # must be odd
-    ini = [[i, j, k] for i in np.linspace(-0.05, 0.05, vol) for j in np.linspace(-0.05, 0.05, vol) for k in
-           np.linspace(-0.05, 0.05, vol)]
-    print(ini)
-    mid = int((vol**3 + 1)/2)
-
-    param = [1, np.sqrt(1/3), np.sqrt(2/3), 1]
-    lines = []
-    for i in ini:
-        lines.append(solvefields.abc_field(start, end, step, i, param))
-
-    var = []
-    for i in range(len(lines[0].s)):
-
-        mub = mu(lines, i, mid)
-        v = 0
-        for j in range(len(lines)):
-            v += np.power(delta(lines[mid], lines[j], i) - mub, 2)
-        var.append(v/len(lines))
-
-    s = np.log10((np.array(lines[0].s)))
-    var = np.log10((np.array(var)))
-
-    fig = plt.figure()
-    ax = fig.add_subplot()
-    ax.plot(s, var, color='purple')
-    ax.set_xlabel(r'$\log_{10} s$')
-    ax.set_ylabel(r'$\log_{10} \sigma^2$')
-
-    a = [i for i in s if i > 0]
-    index = len(s) - len(a)
-    b = var[index:]
-
-    try:
-        p = np.polyfit(a, b, deg=1)
-        fit = np.polyval(p, a)
-        ax.plot(a, fit, color='black', label='{}'.format(p[0]))
-        print(p)
-        ax.legend()
-    except:
-        print('fit didnt work')
-
-    """
-
-    f = solvefields.variance()
+    f = solvefields.line_variance(5, 10000, 0.1, [1, np.sqrt(1/3), np.sqrt(2/3), 1], 'abc')
 
     s = np.log10(np.array(f[0]))
     var = np.log10(np.array(f[1]))
@@ -139,7 +82,6 @@ def var_abc():
     ax.set_ylabel(r'$\log_{10} \sigma^2$')
 
     a = [i for i in s if i > 2.08]
-    print(a)
     index = len(s) - len(a)
     b = var[index:]
 
@@ -154,7 +96,7 @@ def var_abc():
 
 
 def var_double():
-    f = solvefields.double_abc_variance()
+    f = solvefields.line_variance(5, 10000, 0.1, [1, 1, np.sqrt(1/3), np.sqrt(1/3), np.sqrt(2/3), np.sqrt(2/3), 1, -0.5], 'double')
 
     s = np.log10(np.array(f[0]))
     var = np.log10(np.array(f[1]))
@@ -166,7 +108,6 @@ def var_double():
     ax.set_ylabel(r'$\log_{10} \sigma^2$')
 
     a = [i for i in s if i > 1.86]
-    print(a)
     index = len(s) - len(a)
     b = var[index:]
 
@@ -174,15 +115,16 @@ def var_double():
         p = np.polyfit(a, b, deg=1)
         fit = np.polyval(p, a)
         ax.plot(a, fit, color='black', label='{}'.format(p[0]))
-        print(p)
         ax.legend()
     except:
         print('fit didnt work')
 
 
 if __name__ == '__main__':
-    #one_line()
+    poincare_one_line(0, 10000000, 0.1, [0.5*2*np.pi, 0.6*2*np.pi, 0.5*2*np.pi], [1, np.sqrt(2/3), np.sqrt(1/3), 1])
     #multi_line()
-    var_double()
+    #var_abc()
+    #var_double()
+
     plt.show()
 
