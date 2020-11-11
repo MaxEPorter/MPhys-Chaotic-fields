@@ -27,9 +27,9 @@ def poincare_one_line(start=0, end=100, step=0.1, ini=[0.2, 3.2, 1.7], param=[1,
 
 def multi_line():
     start = 0
-    end = 10000
+    end = 100
     step = 0.1
-    n = 15
+    n = 30
     ini = [[i, j, k] for i in np.linspace(0, 2*np.pi, n) for j in np.linspace(0, 2*np.pi, n) for k in np.linspace(0, 2*np.pi, n)]
 
     param = [1, np.sqrt(2/3), np.sqrt(1/3), 1]
@@ -113,12 +113,12 @@ def lyapunov(end, step, ini, param):
 
 
 if __name__ == '__main__':
-    #poincare_one_line(0, 1000000, 0.1, [0.7*2*np.pi, 0.8*2*np.pi, 0.3*2*np.pi], [1, np.sqrt(2/3), np.sqrt(1/3), 1])
-    #multi_line()
+    #poincare_one_line(0, 100000, 0.1, [0.5*2*np.pi, 0.5*2*np.pi, 0.5*2*np.pi], [1, np.sqrt(2/3), np.sqrt(1/3), 1])
+    multi_line()
     #var_abc()
     #var_double()
     #abc_field.plot_one(0, 10000, 0.1, [0.1, 0.1, 0.1], [1, np.sqrt(2/3), np.sqrt(1/3), 1])
-    lyapunov(20000, 0.0001, [0.1, 0.1, 0.1], [1, np.sqrt(2/3), np.sqrt(1/3), 1])
+    #lyapunov(20000, 0.0001, [0.1, 0.1, 0.1], [1, np.sqrt(2/3), np.sqrt(1/3), 1])
 
     plt.show()
 
