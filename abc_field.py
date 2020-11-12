@@ -699,8 +699,8 @@ if __name__ == '__main__':
     # projection()
     #plot_one(0, 10000, 0.1, [0.3*2*np.pi, 0.2*2*np.pi, 0.2*2*np.pi], [1, 2, 1, 1])
 
-    plot_one_periodic(0, 5000, 0.1, [0.4*2*np.pi, 0.5*2*np.pi, 0.5*2*np.pi], [1, 2, 1, 1])
-    #one_projection(0, 10000, 0.1, [0.3*2*np.pi, 0.3*2*np.pi, 0.2*2*np.pi], [1, 1, 1, 4])
+    plot_one_periodic(0, 10000, 0.1, [0.5*2*np.pi, 0.5*2*np.pi, 0.5*2*np.pi], [1, np.sqrt(2/3), np.sqrt(1/3), 1])
+    #one_projection(0, 10000, 0.1, [0.5*2*np.pi, 0.5*2*np.pi, 0.5*2*np.pi], [1, np.sqrt(2/3), np.sqrt(1/3), 1])
 
     # multi_projection(s=0, e=3000, st=0.1, n=5, p=[1, 2, 1, 1])
     #test_projection()
