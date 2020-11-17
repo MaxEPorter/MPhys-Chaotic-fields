@@ -95,11 +95,6 @@ def compare_step():
     z.legend()
 
 
-def animate_abc(i, s_start, s_length, step, start, params):
-    l = solvefields.abc_field(s_start, s_length, step, start[i], params)
-    return
-
-
 def ini_gifs():
     params = [3, np.sqrt(2 / 3), np.sqrt(1 / 3), 1]
 
