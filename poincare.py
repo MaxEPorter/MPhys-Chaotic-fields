@@ -1,7 +1,8 @@
-import solvefields
+import chaoticfields as chaos
 import saveload
 import abc_field
 import double_abc_field
+import usefulthings as use
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -26,21 +27,15 @@ def poincare_one_line(start=0, end=100, step=0.1, ini=[0.2, 3.2, 1.7], param=[1,
     ax.set_ylabel(r'$\frac{y}{2 \pi}$')
 
 
-def multi_line():
-    start = 0
-    end = 1000
-    step = 0.1
-    n = 5
-    ini = [[i, j, k] for i in np.linspace(0, 2*np.pi, n) for j in np.linspace(0, 2*np.pi, n) for k in np.linspace(0, 2*np.pi, n)]
+def multi_line(start, end, step, n, param):
 
-    param = [1, np.sqrt(2/3), np.sqrt(1/3), 1]
-    #param = [1, 1, np.sqrt(2/3), np.sqrt(2/3), np.sqrt(1/3), np.sqrt(1/3), 1, -0.5]
+    ini = [[i, j, k] for i in np.linspace(0, 2*np.pi, n) for j in np.linspace(0, 2*np.pi, n) for k in np.linspace(0, 2*np.pi, n)]
 
     fig = plt.figure()
     ax = fig.add_subplot()
 
     for i in ini:
-        points = solvefields.abc_poincare(start, end, step, i, param, "z", 0)
+        points = chaos.abc_poincare(start, end, step, i, param, "z", 0)
         ax.scatter(points[0], points[1], s=0.02)
         ax.set_xlim(0, 1)
         ax.set_ylim(0, 1)
@@ -82,7 +77,7 @@ def poincare_gif():
     imageio.mimsave('test.gif', ims, fps=10)
 
 
-def poincare_multi_gif():
+def poincare_multi_gif_plane():
     n = 30
     lines = 5
     start = 0
@@ -115,52 +110,50 @@ def poincare_multi_gif():
     imageio.mimsave('test.gif', ims, fps=10)
 
 
+def poincare_multi_gif_param():
+    n = 20
+    lines = 8
+    start = 0
+    end = 10000
+    step = 0.1
+    ini = [[i, j, k] for i in np.linspace(0, 2*np.pi, lines) for j in np.linspace(0, 2*np.pi, lines) for k in np.linspace(0, 2*np.pi, lines)]
+    params = [[i, np.sqrt(2/3), np.sqrt(1/3), 1] for i in np.linspace(0, 0.1, n)]
+    plane = 0
 
-def lyapunov(end, step, ini, param):
+    ims = []
+    for i in params:
 
-    lyapunov_distance = 150
-    lyapunov_steps = lyapunov_distance / step
+        fig = plt.figure()
+        ax = fig.add_subplot()
 
-    max_steps = end / step
-    n_points = max_steps / lyapunov_steps
-    print(n_points)
+        for j in ini:
+            points = chaos.abc_poincare(start, end, step, j, i, "z", plane)
+            ax.scatter(points[0], points[1], s=0.05)
+            ax.set_xlim(0, 1)
+            ax.set_ylim(0, 1)
+            ax.set_xlabel(r'$\frac{x}{2 \pi}$')
+            ax.set_ylabel(r'$\frac{y}{2 \pi}$')
+            ax.set_title('A = {:.3f}'.format(i[0]))
 
-    #"""
+        fig.savefig('temp.png')
+        plt.close()
 
-    x = solvefields.lyapunov(end, step, ini, param)
+        ims.append(imageio.imread('temp.png'))
 
-    fig = plt.figure()
-    ax = fig.add_subplot()
+    imageio.mimsave('test.gif', ims, fps=2)
 
-    ax.plot(x[0], x[1], color='green')
-    ax.scatter(x[0], x[1], color='blue', s=2)
-    ax.set_xlabel('s')
-    ax.set_ylabel('$\lambda$')
-    #"""
 
-    #print(len(x[0]))
-
-    """
-    end = 200
-    line1 = solvefields.abc_field_euler(0, end, step, ini, param)
-    line2 = solvefields.abc_field_euler(0, end, step, [ini[0] + 0.000001, ini[1], ini[2]], param)
-
-    fog = plt.figure()
-    ox = fog.add_subplot()
-    ox.plot(line1.s, line1.x)
-    ox.plot(line2.s, line2.x)
-    """
 
 if __name__ == '__main__':
-    #abc_field.plot_one(0, 10000, 0.1, [0.4*2*np.pi, 0.4*2*np.pi, 0.4*2*np.pi], [1, np.sqrt(2/3), np.sqrt(1/3), 1])
-    #poincare_one_line(0, 10000, 0.1, [0.4*2*np.pi, 0.4*2*np.pi, 0.4*2*np.pi], [1, np.sqrt(2/3), np.sqrt(1/3), 1])
-    multi_line()
-    #poincare_multi_gif()
-    #poincare_gif()
-    #var_abc()
-    #var_double()
-    #abc_field.plot_one(0, 20000, 0.1, [0.5*2*np.pi, 0.5*2*np.pi, 0.5*2*np.pi], [1, np.sqrt(2/3), np.sqrt(1/3), 1])
-    #lyapunov(10000, 0.001, [0.5*2*np.pi, 0.5*2*np.pi, 0.5*2*np.pi], [1, np.sqrt(2/3), np.sqrt(1/3), 1])
+
+    # poincare_one_line(0, 10000, 0.1, [0.4*2*np.pi, 0.4*2*np.pi, 0.4*2*np.pi], [1, np.sqrt(2/3), np.sqrt(1/3), 1])
+    #multi_line(0, 1000, 0.1, 10, [0, np.sqrt(2/3), np.sqrt(1/3), 1])
+    # poincare_multi_gif()
+    # poincare_gif()
+    poincare_multi_gif_param()
+
+
+
 
     plt.show()
 

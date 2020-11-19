@@ -1,4 +1,4 @@
-import solvefields
+import chaoticfields as chaos
 import matplotlib.pyplot as plt
 from matplotlib.ticker import (AutoMinorLocator, MultipleLocator)
 import numpy as np

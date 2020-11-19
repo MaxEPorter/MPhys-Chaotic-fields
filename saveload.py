@@ -1,5 +1,5 @@
 import json
-import solvefields
+import chaoticfields as chaos
 import numpy as np
 
 
