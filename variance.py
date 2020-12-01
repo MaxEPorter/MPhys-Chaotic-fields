@@ -1,6 +1,9 @@
 import numpy as np
 import chaoticfields as chaos
 import matplotlib.pyplot as plt
+import usefulthings as use
+
+plt.style.use('seaborn-whitegrid')
 
 
 def var_abc():
@@ -12,7 +15,7 @@ def var_abc():
 
     fig = plt.figure()
     ax = fig.add_subplot()
-    ax.plot(s, var, color='purple')
+    ax.plot(s, var, color='dodgerblue')
     ax.set_xlabel(r'$\log_{10} s$')
     ax.set_ylabel(r'$\log_{10} \sigma^2$')
 
@@ -21,10 +24,8 @@ def var_abc():
     b = var[index:]
 
     try:
-        p = np.polyfit(a, b, deg=1)
-        fit = np.polyval(p, a)
-        ax.plot(a, fit, color='black', label='{}'.format(p[0]))
-        print(p)
+        fitted = use.lin_fit(a, b)
+        ax.plot(a, fitted['fit'], color='black', label='{:.4f} +- {:.4f}'.format(fitted['p'][0], fitted['perror'][0]))
         ax.legend()
     except:
         print('fit didnt work')
@@ -38,7 +39,7 @@ def var_double():
 
     fig = plt.figure()
     ax = fig.add_subplot()
-    ax.plot(s, var, color='purple')
+    ax.plot(s, var, color='dodgerblue')
     ax.set_xlabel(r'$\log_{10} s$')
     ax.set_ylabel(r'$\log_{10} \sigma^2$')
 
@@ -47,9 +48,8 @@ def var_double():
     b = var[index:]
 
     try:
-        p = np.polyfit(a, b, deg=1)
-        fit = np.polyval(p, a)
-        ax.plot(a, fit, color='black', label='{}'.format(p[0]))
+        fitted = use.lin_fit(a, b)
+        ax.plot(a, fitted['fit'], color='black', label='{:.4f} +- {:.4f}'.format(fitted['p'][0], fitted['perror'][0]))
         ax.legend()
     except:
         print('fit didnt work')
