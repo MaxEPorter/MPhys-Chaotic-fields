@@ -32,7 +32,7 @@ def var_abc():
 
 
 def var_double():
-    f = chaos.line_variance(5, 10000, 0.1, [1, 1, np.sqrt(1/3), np.sqrt(1/3), np.sqrt(2/3), np.sqrt(2/3), 1, -0.5], 'double')
+    f = chaos.line_variance(5, 10000, 0.1, use.begin_std_chaotic, [1, 1, np.sqrt(1/3), np.sqrt(1/3), np.sqrt(2/3), np.sqrt(2/3), 1, -0.5], 'double')
 
     s = np.log10(np.array(f[0]))
     var = np.log10(np.array(f[1]))
@@ -57,5 +57,6 @@ def var_double():
 
 if __name__ == '__main__':
     var_abc()
+
 
     plt.show()
