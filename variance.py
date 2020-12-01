@@ -8,7 +8,7 @@ plt.style.use('seaborn-whitegrid')
 
 def var_abc():
 
-    f = chaos.line_variance(5, 10000, 0.1, [1, np.sqrt(1/3), np.sqrt(2/3), 1], 'abc')
+    f = chaos.line_variance(5, 10000, 0.1, use.begin_std_chaotic, use.std_param_abc, 'abc')
 
     s = np.log10(np.array(f[0]))
     var = np.log10(np.array(f[1]))
