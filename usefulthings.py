@@ -10,3 +10,4 @@ begin_6 = [0.6*2*np.pi, 0.6*2*np.pi, 0.6*2*np.pi]
 
 std_param_abc = [1, np.sqrt(2/3), np.sqrt(1/3), 1]
 std_param_double = [1, 1, np.sqrt(2/3), np.sqrt(2/3), np.sqrt(1/3), np.sqrt(1/3), 1, -0.5]
+std_param_abc_double_form = [1, 0, np.sqrt(2/3), 0, np.sqrt(1/3), 0, 1, 0]

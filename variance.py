@@ -53,3 +53,9 @@ def var_double():
         ax.legend()
     except:
         print('fit didnt work')
+
+
+if __name__ == '__main__':
+    var_abc()
+
+    plt.show()

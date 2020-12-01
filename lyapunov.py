@@ -129,8 +129,8 @@ def lyapunov_regression(end, step, ini, param):
 
 
 if __name__ == '__main__':
-    traj_split(100, 0.1, use.begin_6, use.std_param_abc, 0.0001)
+    traj_split(50, 0.1, use.begin_4, use.std_param_abc, 0.0001)
     #lyapunov(10000, 0.1, use.begin_centre, use.std_param_abc)
-    lyapunov_regression(5000, 0.1, use.begin_centre, use.std_param_abc)
+    #lyapunov_regression(5000, 0.1, use.begin_centre, use.std_param_abc)
 
     plt.show()

@@ -12,15 +12,15 @@ import imageio
 plt.style.use('seaborn-whitegrid')
 
 
-def poincare_one_line(start=0, end=100, step=0.1, ini=[0.2, 3.2, 1.7], param=[1, np.sqrt(2/3), np.sqrt(1/3), 1]):
+def poincare_one_line(start, end, step, ini, param):
 
     abc_field.plot_one(start, end, step, ini, param)
 
     fog = plt.figure()
     ax = fog.add_subplot()
-    xy = solvefields.abc_poincare(start, end, step, ini, param, "z", 0)
+    xy = chaos.abc_poincare(start, end, step, ini, param, "z", 0)
 
-    ax.scatter(xy[0], xy[1], color='purple', s=0.05)
+    ax.scatter(xy[0], xy[1], color='dodgerblue', s=0.1)
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
     ax.set_xlabel(r'$\frac{x}{2 \pi}$')
@@ -146,11 +146,11 @@ def poincare_multi_gif_param():
 
 if __name__ == '__main__':
 
-    # poincare_one_line(0, 10000, 0.1, [0.4*2*np.pi, 0.4*2*np.pi, 0.4*2*np.pi], [1, np.sqrt(2/3), np.sqrt(1/3), 1])
-    #multi_line(0, 1000, 0.1, 10, [0, np.sqrt(2/3), np.sqrt(1/3), 1])
+    poincare_one_line(0, 10000, 0.1, [0.24*2*np.pi, 0.2*2*np.pi, 0.5*2*np.pi], [1, np.sqrt(2/3), np.sqrt(1/3), 1])
+    #multi_line(0, 1000, 0.1, 10, [1, np.sqrt(2/3), np.sqrt(1/3), 1])
     # poincare_multi_gif()
     # poincare_gif()
-    poincare_multi_gif_param()
+    #poincare_multi_gif_param()
 
 
 

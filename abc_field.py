@@ -22,9 +22,9 @@ def compare_methods():
     path_length = 1000
     step_length = 0.01
 
-    line_rkf = solvefields.abc_field(path_start, path_length, step_length, start, params)
-    line_euler = solvefields.abc_field_euler(path_start, path_length, step_length, start, params)
-    line_rk4 = solvefields.abc_field_rk4(path_start, path_length, step_length, start, params)
+    line_rkf = chaos.abc_field(path_start, path_length, step_length, start, params)
+    line_euler = chaos.abc_field_euler(path_start, path_length, step_length, start, params)
+    line_rk4 = chaos.abc_field_rk4(path_start, path_length, step_length, start, params)
 
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
@@ -60,7 +60,7 @@ def compare_step():
     ax.plot(start[0], start[1], start[2], marker='x', color='black')
 
     for l in step_length:
-        line = solvefields.abc_field(path_start, path_length, l, start, params)
+        line = chaos.abc_field(path_start, path_length, l, start, params)
         ax.plot(line.x, line.y, line.z, label='{}'.format(l))
         x.plot(line.s, line.x, label='{} step'.format(l))
         y.plot(line.s, line.y, label='{} step'.format(l))
@@ -118,7 +118,7 @@ def ini_gifs():
         ax.set_zlim3d([-5, 5])
         ax.set_zlabel('Z')
 
-        line = solvefields.abc_field(path_start, path_length, step_length, i, params)
+        line = chaos.abc_field(path_start, path_length, step_length, i, params)
         ax.plot(line.x, line.y, line.z, color='purple')
         fig.savefig('temp.png')
         plt.close()
@@ -152,7 +152,7 @@ def lambda_gifs():
         ax.set_zlim3d([0, 400])
         ax.set_zlabel('Z')
 
-        line = solvefields.abc_field(path_start, path_length, step_length, ini, [1, 2, 3, i])
+        line = chaos.abc_field(path_start, path_length, step_length, ini, [1, 2, 3, i])
         ax.plot(line.x, line.y, line.z, color='purple')
         fig.savefig('temp.png')
         plt.close()
@@ -165,7 +165,7 @@ def lambda_gifs():
 def plot_one(ss, se, size, ini, param):
     print('expected time = {}'.format(estimate_duration(se/size)))
     t0 = time.time()
-    line = solvefields.abc_field(ss, se, size, ini, param)
+    line = chaos.abc_field(ss, se, size, ini, param)
 
     fig = plt.figure()
     traj = fig.add_subplot(221, projection='3d')
@@ -200,11 +200,11 @@ def plot_one_periodic(ss, se, size, ini, param):
 
     print('expected time = {}'.format(estimate_duration(se/size)))
     t0 = time.time()
-    line = solvefields.abc_field(ss, se, size, ini, param)
-    lx = solvefields.periodic_projection(line.x)
-    ly = solvefields.periodic_projection(line.y)
-    lz = solvefields.periodic_projection(line.z)
-    begin = solvefields.periodic_projection(ini)
+    line = chaos.abc_field(ss, se, size, ini, param)
+    lx = chaos.periodic_projection(line.x)
+    ly = chaos.periodic_projection(line.y)
+    lz = chaos.periodic_projection(line.z)
+    begin = chaos.periodic_projection(ini)
 
     fig = plt.figure()
 
@@ -228,19 +228,19 @@ def plot_one_periodic(ss, se, size, ini, param):
     fog = plt.figure()
 
     x = fog.add_subplot(231)
-    x.scatter(line.s, lx, color='green', s=lw)
+    x.scatter(line.s, line.x, color='green', s=lw)
     x.set_xlabel('s')
     x.set_ylabel('x')
     x.grid()
 
     y = fog.add_subplot(232)
-    y.scatter(line.s, ly, color='green', s=lw)
+    y.scatter(line.s, line.y, color='green', s=lw)
     y.set_xlabel('s')
     y.set_ylabel('y')
     y.grid()
 
     z = fog.add_subplot(233)
-    z.scatter(line.s, lz, color='green', s=lw)
+    z.scatter(line.s, line.z, color='green', s=lw)
     z.set_xlabel('s')
     z.set_ylabel('z')
     z.grid(which='both')
@@ -271,7 +271,7 @@ def multi_plot():
     ini = [[i, j, k] for i in np.linspace(-1, 1, 2) for j in np.linspace(-1, 1, 2) for k in np.linspace(-1, 1, 2)]
     lines = []
     for i in ini:
-        lines.append(solvefields.abc_field(0, 1000, 0.01, i, [1, np.sqrt(1/3), np.sqrt(2/3), 1]))
+        lines.append(chaos.abc_field(0, 1000, 0.01, i, [1, np.sqrt(1/3), np.sqrt(2/3), 1]))
 
     fig = plt.figure()
     x = fig.add_subplot(222)
@@ -306,7 +306,7 @@ def times():
     for i in ends:
         t0 = time.time()
 
-        solvefields.abc_field(start, i, step, ini, param)
+        chaos.abc_field(start, i, step, ini, param)
 
         t1 = time.time()
         t.append(t1 - t0)
@@ -352,9 +352,9 @@ def dobre_zero_c(n=1):
     ax = fig.add_subplot()
 
     for i in ini:
-        line = solvefields.abc_field(start, end, step, i, param)
-        x = solvefields.periodic_projection(line.x)
-        z = solvefields.periodic_projection(line.z)
+        line = chaos.abc_field(start, end, step, i, param)
+        x = chaos.periodic_projection(line.x)
+        z = chaos.periodic_projection(line.z)
 
         ax.scatter(x, z, s=0.1)
 
@@ -388,10 +388,10 @@ def multi_projection(s=0, e=30000, st=0.1, n=1, p=[1, 2, 1, 1]):
     c = np.linspace(0, 1, n)
 
     for begin in ini:
-        line = solvefields.abc_field(start, end, step, begin, param)
-        x = solvefields.periodic_projection(line.x)
-        y = solvefields.periodic_projection(line.y)
-        z = solvefields.periodic_projection(line.z)
+        line = chaos.abc_field(start, end, step, begin, param)
+        x = chaos.periodic_projection(line.x)
+        y = chaos.periodic_projection(line.y)
+        z = chaos.periodic_projection(line.z)
 
         ax1.scatter(x, y, s=0.1)
         ax2.scatter(x, z, s=0.1)
@@ -431,11 +431,11 @@ def one_projection(s=0, e=3000, st=0.1, i=[1., 1., 1.], p=[1., 2., 1., 1.]):
 
     t0 = time.time()
 
-    line = solvefields.abc_field(start, end, step, ini, param)
-    x = solvefields.periodic_projection(line.x)
-    y = solvefields.periodic_projection(line.y)
-    z = solvefields.periodic_projection(line.z)
-    begin = solvefields.periodic_projection(ini)
+    line = chaos.abc_field(start, end, step, ini, param)
+    x = chaos.periodic_projection(line.x)
+    y = chaos.periodic_projection(line.y)
+    z = chaos.periodic_projection(line.z)
+    begin = chaos.periodic_projection(ini)
 
     plt.figure()
     ax1 = plt.subplot()
@@ -511,16 +511,16 @@ def projection_gif_ini():
         ax2 = fig.add_subplot(222)
         ax3 = fig.add_subplot(223)
 
-        line = solvefields.abc_field(start, end, step, i, param)
-        x = solvefields.periodic_projection(line.x)
-        y = solvefields.periodic_projection(line.y)
-        z = solvefields.periodic_projection(line.z)
+        line = chaos.abc_field(start, end, step, i, param)
+        x = chaos.periodic_projection(line.x)
+        y = chaos.periodic_projection(line.y)
+        z = chaos.periodic_projection(line.z)
 
         ax1.scatter(x, y, s=0.1, color='mediumpurple')
         ax2.scatter(x, z, s=0.1, color='mediumseagreen')
         ax3.scatter(y, z, s=0.1, color='steelblue')
 
-        begin = solvefields.periodic_projection(i)
+        begin = chaos.periodic_projection(i)
         ax1.scatter(begin[0], begin[1], marker='x', color='black', s=20)
         ax2.scatter(begin[0], begin[2], marker='x', color='black', s=20)
         ax3.scatter(begin[1], begin[2], marker='x', color='black', s=20)
@@ -577,10 +577,10 @@ def projection_one_plane_ini_gif():
         fig = plt.figure()
         ax1 = fig.add_subplot()
 
-        line = solvefields.abc_field(start, end, step, i, param)
-        x = solvefields.periodic_projection(line.x)
-        y = solvefields.periodic_projection(line.y)
-        z = solvefields.periodic_projection(line.z)
+        line = chaos.abc_field(start, end, step, i, param)
+        x = chaos.periodic_projection(line.x)
+        y = chaos.periodic_projection(line.y)
+        z = chaos.periodic_projection(line.z)
 
         ax1.scatter(y, z, s=0.5, color=c)#'springgreen')
 
@@ -629,16 +629,16 @@ def projection_gif_param():
         ax2 = fig.add_subplot(222)
         ax3 = fig.add_subplot(223)
 
-        line = solvefields.abc_field(start, end, step, ini, i)
-        x = solvefields.periodic_projection(line.x)
-        y = solvefields.periodic_projection(line.y)
-        z = solvefields.periodic_projection(line.z)
+        line = chaos.abc_field(start, end, step, ini, i)
+        x = chaos.periodic_projection(line.x)
+        y = chaos.periodic_projection(line.y)
+        z = chaos.periodic_projection(line.z)
 
         ax1.scatter(x, y, s=0.1, color='magenta')
         ax2.scatter(x, z, s=0.1, color='mediumseagreen')
         ax3.scatter(y, z, s=0.1, color='dodgerblue')
 
-        begin = solvefields.periodic_projection(ini)
+        begin = chaos.periodic_projection(ini)
         ax1.scatter(begin[0], begin[1], marker='x', color='black', s=20)
         ax2.scatter(begin[0], begin[2], marker='x', color='black', s=20)
         ax3.scatter(begin[1], begin[2], marker='x', color='black', s=20)
@@ -694,8 +694,8 @@ if __name__ == '__main__':
     # projection()
     #plot_one(0, 10000, 0.1, [0.3*2*np.pi, 0.2*2*np.pi, 0.2*2*np.pi], [1, 2, 1, 1])
 
-    plot_one_periodic(0, 10000, 0.1, [0.5*2*np.pi, 0.5*2*np.pi, 0.5*2*np.pi], [1, np.sqrt(2/3), np.sqrt(1/3), 1])
-    #one_projection(0, 10000, 0.1, [0.5*2*np.pi, 0.5*2*np.pi, 0.5*2*np.pi], [1, np.sqrt(2/3), np.sqrt(1/3), 1])
+    plot_one_periodic(0, 100, 0.1, [0.5*2*np.pi, 0.7*2*np.pi, 0.5*2*np.pi], [1, 2, 1, 1])
+    one_projection(0, 10000, 0.1, [0.5*2*np.pi, 0.7*2*np.pi, 0.5*2*np.pi], [1, 2, 1, 1])
 
     # multi_projection(s=0, e=3000, st=0.1, n=5, p=[1, 2, 1, 1])
     #test_projection()
