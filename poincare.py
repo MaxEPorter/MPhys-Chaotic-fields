@@ -78,8 +78,8 @@ def poincare_gif():
 
 
 def poincare_multi_gif_plane():
-    n = 30
-    lines = 5
+    n = 40
+    lines = 10
     start = 0
     end = 1000
     step = 0.1
@@ -94,7 +94,7 @@ def poincare_multi_gif_plane():
         ax = fig.add_subplot()
 
         for j in ini:
-            points = solvefields.abc_poincare(start, end, step, j, param, "z", i)
+            points = chaos.abc_poincare(start, end, step, j, param, "z", i)
             ax.scatter(points[0], points[1], s=0.05)
             ax.set_xlim(0, 1)
             ax.set_ylim(0, 1)
@@ -146,9 +146,9 @@ def poincare_multi_gif_param():
 
 if __name__ == '__main__':
 
-    poincare_one_line(0, 10000, 0.1, [0.24*2*np.pi, 0.2*2*np.pi, 0.5*2*np.pi], [1, np.sqrt(2/3), np.sqrt(1/3), 1])
+    #poincare_one_line(0, 10000, 0.1, [0.24*2*np.pi, 0.2*2*np.pi, 0.5*2*np.pi], [1, np.sqrt(2/3), np.sqrt(1/3), 1])
     #multi_line(0, 1000, 0.1, 10, [1, np.sqrt(2/3), np.sqrt(1/3), 1])
-    # poincare_multi_gif()
+    poincare_multi_gif_plane()
     # poincare_gif()
     #poincare_multi_gif_param()
 
