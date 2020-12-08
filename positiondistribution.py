@@ -8,7 +8,7 @@ plt.style.use('seaborn-whitegrid')
 
 def dist():
 
-    sol = chaos.coord_frequency('abc', 10000000, 0.1, [0.9*2*np.pi, 0.5*2*np.pi, 0], use.std_param_abc, 100000)
+    sol = chaos.coord_frequency('double', 10000000, 0.1, [0.9*2*np.pi, 0.5*2*np.pi, 0], use.std_param_double, 100000)
 
 
     fig = plt.figure()
@@ -32,9 +32,9 @@ def dist():
     """
 
     ax = fig.add_subplot()
-    ax.hist(sol[0], bins=150, edgecolor='dodgerblue', histtype='step', label='x')
-    ax.hist(sol[1], bins=150, edgecolor='mediumseagreen', histtype='step', label='y')
-    ax.hist(sol[2], bins=150, edgecolor='firebrick', histtype='step', label='z')
+    ax.hist(sol[0], bins=300, edgecolor='dodgerblue', histtype='step', label='x')
+    ax.hist(sol[1], bins=300, edgecolor='mediumseagreen', histtype='step', label='y')
+    ax.hist(sol[2], bins=300, edgecolor='firebrick', histtype='step', label='z')
     ax.set_xlabel('sum')
     ax.set_ylabel('frequency')
 

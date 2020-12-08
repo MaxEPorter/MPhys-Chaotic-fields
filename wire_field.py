@@ -1,9 +1,9 @@
-import solvefields
 import matplotlib.pyplot as plt
 import numpy as np
 import math
+import chaoticfields as chaos
 
-plt.style.use('bmh')
+#plt.style.use('bmh')
 
 ROTATIONS = 1
 
@@ -157,11 +157,37 @@ def compare_methods(rot=ROTATIONS):
     print('rk4 final --> x:{}   y:{}'.format(line_rk4.x[-1], line_rk4.y[-1]))
 
 
+def multi_loop():
+
+    inis = [[0, 1, 0], [0, 2, 0],
+            [0, 1, 5], [0, 2, 5],
+            [0, 1, 10], [0, 2, 10]]
+
+    start = 0
+    ends = [circumference(i) for i in inis]
+    print(ends)
+    step = 0.01
+
+    fig = plt.figure()
+    ax = fig.add_subplot(projection='3d')
+    for i, j in zip(ends, inis):
+        line = chaos.wire_field(start, i, step, j)
+        print(line.x[-1])
+        print(line.y[-1])
+        ax.plot(line.x, line.y, line.z, color='dodgerblue')
+
+    ax.plot([0, 0], [0, 0], [-1, 11], color='black')
+    ax.set_xlabel('x')
+    ax.set_ylabel('y')
+    ax.set_zlabel('z')
+
+
 if __name__ == '__main__':
-    vary_steps(10)
+    #vary_steps(10)
     # one_loop(1000)
     # plot_step_lengths(1)
     #compare_methods(1)
+    multi_loop()
 
     plt.show()
 

@@ -49,7 +49,7 @@ def estimate_duration(n_steps):
 
 
 def plot_one(ss, se, size, ini, param):
-    line = solvefields.double_abc_field(ss, se, size, ini, param)
+    line = chaos.double_abc_field(ss, se, size, ini, param)
 
     fig = plt.figure()
     traj = fig.add_subplot(221, projection='3d')
@@ -141,6 +141,7 @@ def plot_one_periodic(ss, se, size, ini, param):
 
 if __name__ == '__main__':
     #times()
-    plot_one_periodic(0, 10000, 0.1, [0.4*2*np.pi, 0.5*2*np.pi, 0.5*2*np.pi], [1, 1, 0.57735026919, 0.57735026919, 0.81649658092, 0.81649658092, 1, -0.5])
+    k = 1
+    plot_one(0, 10000, 0.1, [0.6*2*np.pi, 0.6*2*np.pi, 0.6*2*np.pi], [1, k*1, np.sqrt(2/3), k*np.sqrt(2/3), np.sqrt(1/3), k*np.sqrt(1/3), 1, -0.5])
 
     plt.show()

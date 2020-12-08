@@ -27,7 +27,7 @@ def poincare_one_line(start, end, step, ini, param):
     ax.set_ylabel(r'$\frac{y}{2 \pi}$')
 
 
-def multi_line(start, end, step, n, param):
+def multi_line(method, start, end, step, n, param):
 
     ini = [[i, j, k] for i in np.linspace(0, 2*np.pi, n) for j in np.linspace(0, 2*np.pi, n) for k in np.linspace(0, 2*np.pi, n)]
 
@@ -35,7 +35,7 @@ def multi_line(start, end, step, n, param):
     ax = fig.add_subplot()
 
     for i in ini:
-        points = chaos.abc_poincare(start, end, step, i, param, "z", 0)
+        points = chaos.abc_poincare(method, start, end, step, i, param, "z", 0.6)
         ax.scatter(points[0], points[1], s=0.02)
         ax.set_xlim(0, 1)
         ax.set_ylim(0, 1)
@@ -79,12 +79,12 @@ def poincare_gif():
 
 def poincare_multi_gif_plane():
     n = 40
-    lines = 10
+    lines = 6
     start = 0
-    end = 1000
+    end = 10000
     step = 0.1
     ini = [[i, j, k] for i in np.linspace(0, 2*np.pi, lines) for j in np.linspace(0, 2*np.pi, lines) for k in np.linspace(0, 2*np.pi, lines)]
-    param = [1, np.sqrt(2/3), np.sqrt(1/3), 1]
+    param = [1, 0.3*1, np.sqrt(2/3), 0, np.sqrt(1/3), 0, 1, -0.5]
     plane = [i for i in np.linspace(0, 0.999, n)]
 
     ims = []
@@ -94,7 +94,7 @@ def poincare_multi_gif_plane():
         ax = fig.add_subplot()
 
         for j in ini:
-            points = chaos.abc_poincare(start, end, step, j, param, "z", i)
+            points = chaos.abc_poincare('double', start, end, step, j, param, "z", i)
             ax.scatter(points[0], points[1], s=0.05)
             ax.set_xlim(0, 1)
             ax.set_ylim(0, 1)
@@ -112,12 +112,12 @@ def poincare_multi_gif_plane():
 
 def poincare_multi_gif_param():
     n = 20
-    lines = 8
+    lines = 6
     start = 0
     end = 10000
     step = 0.1
     ini = [[i, j, k] for i in np.linspace(0, 2*np.pi, lines) for j in np.linspace(0, 2*np.pi, lines) for k in np.linspace(0, 2*np.pi, lines)]
-    params = [[i, np.sqrt(2/3), np.sqrt(1/3), 1] for i in np.linspace(0, 0.1, n)]
+    params = [[1, k, np.sqrt(2/3), k*np.sqrt(2/3), np.sqrt(1/3), k*np.sqrt(1/3), 1, -0.5] for k in np.linspace(0, 0.1, n)]
     plane = 0
 
     ims = []
@@ -127,7 +127,7 @@ def poincare_multi_gif_param():
         ax = fig.add_subplot()
 
         for j in ini:
-            points = chaos.abc_poincare(start, end, step, j, i, "z", plane)
+            points = chaos.abc_poincare('double', start, end, step, j, i, "z", plane)
             ax.scatter(points[0], points[1], s=0.05)
             ax.set_xlim(0, 1)
             ax.set_ylim(0, 1)
@@ -147,10 +147,10 @@ def poincare_multi_gif_param():
 if __name__ == '__main__':
 
     #poincare_one_line(0, 10000, 0.1, [0.24*2*np.pi, 0.2*2*np.pi, 0.5*2*np.pi], [1, np.sqrt(2/3), np.sqrt(1/3), 1])
-    #multi_line(0, 1000, 0.1, 10, [1, np.sqrt(2/3), np.sqrt(1/3), 1])
-    poincare_multi_gif_plane()
+    #multi_line('double', 0, 10000, 0.1, 5, [1, 0.3*1, np.sqrt(2/3), 0, np.sqrt(1/3), 0, 1, -0.5])
+    #poincare_multi_gif_plane()
     # poincare_gif()
-    #poincare_multi_gif_param()
+    poincare_multi_gif_param()
 
 
 
