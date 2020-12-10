@@ -41,6 +41,11 @@ def dist():
     ax.legend()
 
 
+def change_params():
+    pass
+
+
+
 if __name__ == '__main__':
     dist()
 

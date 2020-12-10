@@ -112,7 +112,7 @@ def poincare_multi_gif_plane():
 
 def poincare_multi_gif_param():
     n = 20
-    lines = 6
+    lines = 5
     start = 0
     end = 10000
     step = 0.1
@@ -133,14 +133,14 @@ def poincare_multi_gif_param():
             ax.set_ylim(0, 1)
             ax.set_xlabel(r'$\frac{x}{2 \pi}$')
             ax.set_ylabel(r'$\frac{y}{2 \pi}$')
-            ax.set_title('A = {:.3f}'.format(i[0]))
+            ax.set_title('k = {:.3f}'.format(i[0]))
 
         fig.savefig('temp.png')
         plt.close()
 
         ims.append(imageio.imread('temp.png'))
 
-    imageio.mimsave('test.gif', ims, fps=2)
+    imageio.mimsave('test.gif', ims, fps=4)
 
 
 

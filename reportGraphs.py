@@ -45,9 +45,37 @@ def compare_accuracy():
     ox.legend()
 
 
+def poincare():
+
+    start = 0
+    end = 10000
+    step = 0.1
+    n=10
+
+    ini = [[i, j, k] for i in np.linspace(0, 2*np.pi, n) for j in np.linspace(0, 2*np.pi, n) for k in np.linspace(0, 2*np.pi, n)]
+
+    fig = plt.figure()
+    ax = fig.add_subplot()
+
+    for i in ini:
+        abc = chaos.abc_poincare('abc', start, end, step, i, use.std_param_abc, "z", 0)
+        ax.scatter(abc[0], abc[1], s=0.02)
+
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+    ax.set_xlabel(r'$\frac{x}{2 \pi}$')
+    ax.set_ylabel(r'$\frac{y}{2 \pi}$')
+
+
+def projection():
+    pass
+
+
+
+
 
 if __name__ == '__main__':
     # compare_accuracy()
-
+    poincare()
 
     plt.show()
