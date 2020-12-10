@@ -18,6 +18,7 @@ chaos.recurrence(
     array<3> sphere pos
     double sphere rad
     int n
+returns vector of recurrence lengths
 """
 
 

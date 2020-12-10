@@ -11,6 +11,19 @@ import imageio
 
 plt.style.use('seaborn-whitegrid')
 
+"""
+POINCARE PLOTS
+choas.poincare(
+    double start,
+    double path_length,
+    double step_size,
+    array<3> ini,
+    vector params,
+    string plane x,y,z,
+    double plane_value)
+returns array<vector, 2> of x,y points crossing plane    
+"""
+
 
 def poincare_one_line(start, end, step, ini, param):
 

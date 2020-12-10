@@ -5,6 +5,20 @@ import usefulthings as use
 
 plt.style.use('seaborn-whitegrid')
 
+"""
+FIND DISTRIBUTION OF COORDINATE SUMS 
+chaos.coord_frequency(
+    string method,
+    double path_length,
+    double step_size,
+    array<3> ini,
+    vector params,
+    double number_of_segments)
+
+returns array<3> of vector of x,y,z sum of each segment 
+
+"""
+
 
 def dist():
 
@@ -42,11 +56,22 @@ def dist():
 
 
 def change_params():
-    pass
 
+    fig = plt.figure()
+    ax = fig.add_subplot()
+
+    for i in np.linspace(0, 1, 5):
+
+        sol = chaos.coord_frequency('double', 1000000, 0.1, [0.9*2*np.pi, 0.5*2*np.pi, 0], use.k_param(i), 10000)
+        ax.hist(sol[0], bins=300, edgecolor=[0, i, 0.3], histtype='step', label='k = {}'.format(i))
+
+    ax.set_xlabel('x sum')
+    ax.set_ylabel('frequency')
+    ax.legend()
 
 
 if __name__ == '__main__':
-    dist()
+    #dist()
+    change_params()
 
     plt.show()
