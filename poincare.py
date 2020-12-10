@@ -25,13 +25,13 @@ returns array<vector, 2> of x,y points crossing plane
 """
 
 
-def poincare_one_line(start, end, step, ini, param):
+def poincare_one_line(method, start, end, step, ini, param):
 
     abc_field.plot_one(start, end, step, ini, param)
 
     fog = plt.figure()
     ax = fog.add_subplot()
-    xy = chaos.abc_poincare(start, end, step, ini, param, "z", 0)
+    xy = chaos.abc_poincare(method, start, end, step, ini, param, "z", 0)
 
     ax.scatter(xy[0], xy[1], color='dodgerblue', s=0.1)
     ax.set_xlim(0, 1)
@@ -40,7 +40,7 @@ def poincare_one_line(start, end, step, ini, param):
     ax.set_ylabel(r'$\frac{y}{2 \pi}$')
 
 
-def multi_line(method, start, end, step, n, param):
+def multi_line(method, start, end, step, n, param, plane, planevalue):
 
     ini = [[i, j, k] for i in np.linspace(0, 2*np.pi, n) for j in np.linspace(0, 2*np.pi, n) for k in np.linspace(0, 2*np.pi, n)]
 
@@ -48,7 +48,7 @@ def multi_line(method, start, end, step, n, param):
     ax = fig.add_subplot()
 
     for i in ini:
-        points = chaos.abc_poincare(method, start, end, step, i, param, "z", 0.6)
+        points = chaos.abc_poincare(method, start, end, step, i, param, plane, planevalue)
         ax.scatter(points[0], points[1], s=0.02)
         ax.set_xlim(0, 1)
         ax.set_ylim(0, 1)
@@ -124,13 +124,13 @@ def poincare_multi_gif_plane():
 
 
 def poincare_multi_gif_param():
-    n = 20
-    lines = 5
+    n = 30
+    lines = 6
     start = 0
     end = 10000
     step = 0.1
     ini = [[i, j, k] for i in np.linspace(0, 2*np.pi, lines) for j in np.linspace(0, 2*np.pi, lines) for k in np.linspace(0, 2*np.pi, lines)]
-    params = [[1, k, np.sqrt(2/3), k*np.sqrt(2/3), np.sqrt(1/3), k*np.sqrt(1/3), 1, -0.5] for k in np.linspace(0, 0.1, n)]
+    params = [[1, k, np.sqrt(2/3), k*np.sqrt(2/3), np.sqrt(1/3), k*np.sqrt(1/3), 1, -0.5] for k in np.linspace(0, 0.3, n)]
     plane = 0
 
     ims = []
@@ -146,27 +146,23 @@ def poincare_multi_gif_param():
             ax.set_ylim(0, 1)
             ax.set_xlabel(r'$\frac{x}{2 \pi}$')
             ax.set_ylabel(r'$\frac{y}{2 \pi}$')
-            ax.set_title('k = {:.3f}'.format(i[0]))
+            ax.set_title('k = {:.3f}'.format(i[1]))
 
         fig.savefig('temp.png')
         plt.close()
 
         ims.append(imageio.imread('temp.png'))
 
-    imageio.mimsave('test.gif', ims, fps=4)
-
+    imageio.mimsave('test.gif', ims, fps=5)
 
 
 if __name__ == '__main__':
 
-    #poincare_one_line(0, 10000, 0.1, [0.24*2*np.pi, 0.2*2*np.pi, 0.5*2*np.pi], [1, np.sqrt(2/3), np.sqrt(1/3), 1])
-    #multi_line('double', 0, 10000, 0.1, 5, [1, 0.3*1, np.sqrt(2/3), 0, np.sqrt(1/3), 0, 1, -0.5])
-    #poincare_multi_gif_plane()
+    #poincare_one_line('abc', 0, 100, 0.1, [0.22*2*np.pi, 0.9*2*np.pi, 0*2*np.pi], [1, np.sqrt(2/3), 0, 1])
+    multi_line('double', 0, 10000, 0.1, 9, use.std_param_double, 'z', 0)
+    # poincare_multi_gif_plane()
     # poincare_gif()
-    poincare_multi_gif_param()
-
-
-
+    # poincare_multi_gif_param()
 
     plt.show()
 

@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 """
 useful initial positions, parameters and other functions
@@ -50,3 +51,18 @@ def lin_fit(x, y):
     print('redchisqrd: {}\np: {}\nperror: {}'.format(redchisqrd, p, perror))
 
     return {'fit': fit, 'p': p, 'perror': perror, 'redchisqrd': redchisqrd}
+
+
+def test_color():
+
+    fig = plt.figure()
+    ax = fig.add_subplot()
+
+    for i in np.linspace(0, 1, 10):
+        ax.plot([i, i], [0, 1], color=[i, 1-i, i])
+
+
+if __name__ == '__main__':
+    test_color()
+
+    plt.show()
