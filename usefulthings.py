@@ -26,7 +26,11 @@ def k_param(k):
     return [1, k, np.sqrt(2/3), k*np.sqrt(2/3), np.sqrt(1/3), k*np.sqrt(1/3), 1, -0.5]
 
 
-def lin_fit(x, y):
+def phase_pos(x, y, z):
+    return [x*2*np.pi, y*2*np.pi, z*2*np.pi]
+
+
+def lin_fit(x, y, output=False):
 
     fitted = np.polyfit(x, y, deg=1, cov=True)
     p = fitted[0]
@@ -48,7 +52,8 @@ def lin_fit(x, y):
 
     fit = np.polyval(p, x)
 
-    print('redchisqrd: {}\np: {}\nperror: {}'.format(redchisqrd, p, perror))
+    if output:
+        print('redchisqrd: {}\np: {}\nperror: {}'.format(redchisqrd, p, perror))
 
     return {'fit': fit, 'p': p, 'perror': perror, 'redchisqrd': redchisqrd}
 

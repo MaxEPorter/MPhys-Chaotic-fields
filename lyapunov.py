@@ -3,8 +3,8 @@ import numpy as np
 import chaoticfields as chaos
 import usefulthings as use
 
-#plt.style.use('bmh')
-plt.style.use('ggplot')
+plt.style.use('seaborn-whitegrid')
+plt.rcParams["font.family"] = "serif"
 
 def traj_split(end, step, ini, param, z0):
 
@@ -28,8 +28,8 @@ def traj_split(end, step, ini, param, z0):
         print('fit didnt work')
     """
 
-    refline = chaos.abc_field(0, end, step, ini, param)
-    divline = chaos.abc_field(0, end, step, [ini[0] + z0, ini[1], ini[2]], param)
+    refline = chaos.abc_field_euler(0, end, step, ini, param)
+    divline = chaos.abc_field_euler(0, end, step, [ini[0] + z0, ini[1], ini[2]], param)
     dis = []
 
     for i in range(len(refline.s)):
@@ -99,8 +99,8 @@ def lyapunov(end, step, ini, param):
 def lyapunov_regression(end, step, ini, param):
 
     z0 = 0.0000001
-    lyapunov_distance = 100
-    n_points = 400
+    lyapunov_distance = 200
+    n_points = 2000
 
     reference = chaos.abc_field(0, end, step, ini, param)
 
@@ -109,6 +109,7 @@ def lyapunov_regression(end, step, ini, param):
     s = np.linspace(0, end, n_points)
 
     lams = []
+    lams_er = []
 
     for i in index:
 
@@ -119,18 +120,52 @@ def lyapunov_regression(end, step, ini, param):
         log = chaos.line_distance(refline, divline)
 
         p = np.polyfit(refline.s, log, deg=1)
-        lams.append(p[0])
+        fit = use.lin_fit(refline.s, log)
+        lams.append(fit['p'][0])
+        lams_er.append(fit['perror'][0])
+
+    lam_av = []
+    ers = []
+    for i in range(0, len(lams)):
+        try:
+            lam_av.append((lams[i-1] + lams[i] + lams[i+1])/3)
+            ers.append(
+                (1 / 3) * np.sqrt(np.power(lams_er[i - 1], 2) + np.power(lams_er[i], 2) + np.power(lams_er[i + 1], 2)))
+            continue
+        except:
+            pass
+        try:
+            lam_av.append((lams[i - 1] + lams[i]) / 2)
+            ers.append(
+                (1 / 2) * np.sqrt(np.power(lams_er[i - 1], 2) + np.power(lams_er[i], 2)))
+            continue
+        except:
+            pass
+        try:
+            lam_av.append((lams[i] + lams[i+1]) / 2)
+            ers.append(
+                (1 / 2) * np.sqrt(np.power(lams_er[i], 2) + np.power(lams_er[i + 1], 2)))
+            continue
+        except:
+            pass
+
+    print(ers)
 
     fig = plt.figure()
-    ax = fig.add_subplot()
-    ax.scatter(s, lams, color='green')
+    ax = fig.add_subplot(211)
+    ax.errorbar(s, lam_av, yerr=ers, fmt=',', color='dodgerblue', linestyle=None)
     ax.set_xlabel('s')
     ax.set_ylabel(r'$\lambda$')
 
+    ox = fig.add_subplot(212)
+    ox.plot(reference.s, reference.y, color='mediumseagreen')
+    ox.set_xlabel('s')
+    ox.set_ylabel('y')
+
 
 if __name__ == '__main__':
-    traj_split(50, 0.1, use.begin_4, use.std_param_abc, 0.0001)
-    #lyapunov(10000, 0.1, use.begin_centre, use.std_param_abc)
-    #lyapunov_regression(5000, 0.1, use.begin_centre, use.std_param_abc)
+    # traj_split(100, 0.01, use.begin_2, use.std_param_abc, 0.0000000001)
+    # lyapunov(10000, 0.1, use.begin_centre, use.std_param_abc)
+    lyapunov_regression(1000, 0.1, use.phase_pos(0.6, .3, 0), use.std_param_abc)
 
     plt.show()

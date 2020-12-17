@@ -10,6 +10,7 @@ import pandas
 import imageio
 
 plt.style.use('seaborn-whitegrid')
+plt.rcParams["font.family"] = "serif"
 
 """
 POINCARE PLOTS
@@ -25,35 +26,58 @@ returns array<vector, 2> of x,y points crossing plane
 """
 
 
-def poincare_one_line(method, start, end, step, ini, param):
+def poincare_one_line(method, start, end, step, ini, param, plane, planevalue):
 
     abc_field.plot_one(start, end, step, ini, param)
 
     fog = plt.figure()
     ax = fog.add_subplot()
-    xy = chaos.abc_poincare(method, start, end, step, ini, param, "z", 0)
+    xy = chaos.abc_poincare(method, start, end, step, ini, param, plane, planevalue)
 
     ax.scatter(xy[0], xy[1], color='dodgerblue', s=0.1)
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
+
     ax.set_xlabel(r'$\frac{x}{2 \pi}$')
-    ax.set_ylabel(r'$\frac{y}{2 \pi}$')
+    ax.set_ylabel(r'$\frac{z}{2 \pi}$')
 
 
 def multi_line(method, start, end, step, n, param, plane, planevalue):
 
     ini = [[i, j, k] for i in np.linspace(0, 2*np.pi, n) for j in np.linspace(0, 2*np.pi, n) for k in np.linspace(0, 2*np.pi, n)]
 
-    fig = plt.figure()
+    fig = plt.figure(figsize=(9, 9))
     ax = fig.add_subplot()
 
     for i in ini:
         points = chaos.abc_poincare(method, start, end, step, i, param, plane, planevalue)
         ax.scatter(points[0], points[1], s=0.02)
-        ax.set_xlim(0, 1)
-        ax.set_ylim(0, 1)
-        ax.set_xlabel(r'$\frac{x}{2 \pi}$')
-        ax.set_ylabel(r'$\frac{y}{2 \pi}$')
+
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+
+    if plane == 'z':
+        xl = r'$\frac{x}{2 \pi}$'
+        yl = r'$\frac{y}{2 \pi}$'
+    elif plane == 'y':
+        xl = r'$\frac{x}{2 \pi}$'
+        yl = r'$\frac{z}{2 \pi}$'
+    elif plane == 'x':
+        xl = r'$\frac{y}{2 \pi}$'
+        yl = r'$\frac{z}{2 \pi}$'
+    else:
+        xl = '?'
+        yl = '?'
+
+    ax.set_xlabel(xl, fontsize=16)
+    ax.set_ylabel(yl, fontsize=16)
+
+    if method == 'abc':
+        ax.text(.83, .83, 'A = {:.2f} \nB = {:.2f} \nC = {:.2f} \n$\lambda$ = {:.2f}'.format(*param),
+                fontsize=14,
+                bbox={'facecolor': 'white', 'alpha': 0.5, 'pad': 5})
+
+    plt.savefig('test.png')
 
 
 def poincare_gif():
@@ -158,11 +182,11 @@ def poincare_multi_gif_param():
 
 if __name__ == '__main__':
 
-    #poincare_one_line('abc', 0, 100, 0.1, [0.22*2*np.pi, 0.9*2*np.pi, 0*2*np.pi], [1, np.sqrt(2/3), 0, 1])
-    multi_line('double', 0, 10000, 0.1, 9, use.std_param_double, 'z', 0)
+    # poincare_one_line('abc', 0, 10000, 0.1, use.phase_pos(0.6, 0.4, 0), [1, 1, 1, 1], "z", 0)
+    multi_line('abc', 0, 10000, 0.1, 8, [1, 20, 20, 1], 'z', 0)
     # poincare_multi_gif_plane()
     # poincare_gif()
     # poincare_multi_gif_param()
 
-    plt.show()
+    #plt.show()
 

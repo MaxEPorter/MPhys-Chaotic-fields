@@ -5,6 +5,7 @@ import numpy as np
 import imageio
 import time
 import saveload
+import usefulthings as use
 
 #plt.style.use('seaborn-whitegrid')
 #plt.style.use('Solarize_Light2')
@@ -692,7 +693,7 @@ if __name__ == '__main__':
     # times()
     # dobre_zero_c()
     # projection()
-    plot_one(0, 200, 0.1, [0.23*2*np.pi, 0.602*2*np.pi, 0*2*np.pi], [1, np.sqrt(2/3), 0, 1])
+    plot_one(0, 2000, 0.01, use.phase_pos(0.6, 0.2, 0), [1, 2, 1, 1])
 
     #plot_one_periodic(0, 100, 0.1, [0.5*2*np.pi, 0.7*2*np.pi, 0.5*2*np.pi], [1, 2, 1, 1])
     #one_projection(0, 10000, 0.1, [0.5*2*np.pi, 0.7*2*np.pi, 0.5*2*np.pi], [1, 2, 1, 1])
