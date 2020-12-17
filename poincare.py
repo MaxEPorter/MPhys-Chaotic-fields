@@ -183,10 +183,10 @@ def poincare_multi_gif_param():
 if __name__ == '__main__':
 
     # poincare_one_line('abc', 0, 10000, 0.1, use.phase_pos(0.6, 0.4, 0), [1, 1, 1, 1], "z", 0)
-    multi_line('abc', 0, 10000, 0.1, 8, [1, 20, 20, 1], 'z', 0)
+    multi_line('double', 0, 10000, 0.1, 8, use.k_param(0.33), 'z', 0)
     # poincare_multi_gif_plane()
     # poincare_gif()
     # poincare_multi_gif_param()
 
-    #plt.show()
+    plt.show()
 

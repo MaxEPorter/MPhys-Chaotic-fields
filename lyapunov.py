@@ -2,6 +2,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import chaoticfields as chaos
 import usefulthings as use
+import abc_field as abc
+from scipy.signal import savgol_filter
 
 plt.style.use('seaborn-whitegrid')
 plt.rcParams["font.family"] = "serif"
@@ -98,11 +100,22 @@ def lyapunov(end, step, ini, param):
 
 def lyapunov_regression(end, step, ini, param):
 
-    z0 = 0.0000001
-    lyapunov_distance = 200
-    n_points = 2000
+    """
+    working values:
+    z0 0.0000001
+    lyapunov distance 200-300
+    points 2000
+    """
 
-    reference = chaos.abc_field(0, end, step, ini, param)
+    z0 = 0.0000001
+    lyapunov_distance = 300
+    n_points = 5000
+
+    if len(param) != 8:
+        print("WARNING YOU DONT HAVE 8 PARAMETERS FOR DOUBLE FIELD")
+
+    reference = chaos.double_abc_field(0, end, step, ini, param)
+    abc.plot_one(0, end, step, ini, param)
 
     n_steps = int(end/step)
     index = np.linspace(0, n_steps-1, n_points)
@@ -113,8 +126,8 @@ def lyapunov_regression(end, step, ini, param):
 
     for i in index:
 
-        refline = chaos.abc_field(0, lyapunov_distance, step, ini, param)
-        divline = chaos.abc_field(0, lyapunov_distance, step, [ini[0] + z0, ini[1], ini[2]], param)
+        refline = chaos.double_abc_field(0, lyapunov_distance, step, ini, param)
+        divline = chaos.double_abc_field(0, lyapunov_distance, step, [ini[0] + z0, ini[1], ini[2]], param)
         ini = [reference.x[int(i)], reference.y[int(i)], reference.z[int(i)]]
 
         log = chaos.line_distance(refline, divline)
@@ -132,28 +145,28 @@ def lyapunov_regression(end, step, ini, param):
             ers.append(
                 (1 / 3) * np.sqrt(np.power(lams_er[i - 1], 2) + np.power(lams_er[i], 2) + np.power(lams_er[i + 1], 2)))
             continue
-        except:
+        except IndexError:
             pass
         try:
             lam_av.append((lams[i - 1] + lams[i]) / 2)
             ers.append(
                 (1 / 2) * np.sqrt(np.power(lams_er[i - 1], 2) + np.power(lams_er[i], 2)))
             continue
-        except:
+        except IndexError:
             pass
         try:
             lam_av.append((lams[i] + lams[i+1]) / 2)
             ers.append(
                 (1 / 2) * np.sqrt(np.power(lams_er[i], 2) + np.power(lams_er[i + 1], 2)))
             continue
-        except:
+        except IndexError:
             pass
 
     print(ers)
 
     fig = plt.figure()
     ax = fig.add_subplot(211)
-    ax.errorbar(s, lam_av, yerr=ers, fmt=',', color='dodgerblue', linestyle=None)
+    ax.errorbar(s, lam_av, yerr=ers, fmt=',', color='dodgerblue', linestyle='-')
     ax.set_xlabel('s')
     ax.set_ylabel(r'$\lambda$')
 
@@ -166,6 +179,6 @@ def lyapunov_regression(end, step, ini, param):
 if __name__ == '__main__':
     # traj_split(100, 0.01, use.begin_2, use.std_param_abc, 0.0000000001)
     # lyapunov(10000, 0.1, use.begin_centre, use.std_param_abc)
-    lyapunov_regression(1000, 0.1, use.phase_pos(0.6, .3, 0), use.std_param_abc)
+    lyapunov_regression(1000, 0.1, use.phase_pos(0, .4, .6), use.k_param(0.1))
 
     plt.show()

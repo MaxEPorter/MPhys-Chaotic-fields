@@ -58,6 +58,32 @@ def lin_fit(x, y, output=False):
     return {'fit': fit, 'p': p, 'perror': perror, 'redchisqrd': redchisqrd}
 
 
+def smooth(neighbours, x, xer=None):
+
+    out = []
+    for i in range(len(x)):
+
+        running = 0
+        count = 0
+
+        for j in range(-neighbours, neighbours + 1):
+
+            try:
+                running += x[i + j]
+                count += 1
+            except IndexError:
+                continue
+
+        running = running/count
+        out.append(running)
+
+
+
+
+
+
+
+
 def test_color():
 
     fig = plt.figure()
@@ -67,7 +93,14 @@ def test_color():
         ax.plot([i, i], [0, 1], color=[i, 1-i, i])
 
 
+def test():
+    x = range(-2, 2)
+    for i in x:
+        print(i)
+
+
 if __name__ == '__main__':
-    test_color()
+    # test_color()
+    test()
 
     plt.show()
