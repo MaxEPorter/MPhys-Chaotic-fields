@@ -179,6 +179,7 @@ def lyapunov_regression(end, step, ini, param):
 if __name__ == '__main__':
     # traj_split(100, 0.01, use.begin_2, use.std_param_abc, 0.0000000001)
     # lyapunov(10000, 0.1, use.begin_centre, use.std_param_abc)
+    print('wow')
     lyapunov_regression(1000, 0.1, use.phase_pos(0, .4, .6), use.k_param(0.1))
 
     plt.show()
